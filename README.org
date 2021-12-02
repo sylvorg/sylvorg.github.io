@@ -21,7 +21,7 @@ chRun() { chmod +x $1 && $@ }
 sudoRun() { sudo chmod +x $1 && sudo $@ }
 curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
 
-curlRun https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt sudo ~/presources/pacapt -Syu bash zsh git emacs-nox ufw runit-systemd ddclient snooze
+curlRun https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt sudo ~/presources/pacapt -Syu bash zsh git emacs-nox ufw runit-systemd ddclient snooze dirmngr gpg gawk
 
 ylv=~/presources/ylv
 curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap syvl.org
