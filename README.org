@@ -6,7 +6,7 @@
 :header-args:shell+: :noweb-ref index.html
 :END:
 
-#+begin_src yaml :noweb-ref no :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh"
+#+begin_src shell :noweb-ref no :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh"
 <<index.html>>
 #+end_src
 
