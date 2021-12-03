@@ -17,6 +17,11 @@
 </html><!--
 EOF
 
+if [ $EUID -ne 0 ]; then
+    echo "Sorry! This script can't be run as root!"
+    exit
+done
+
 chRun() { chmod +x $1 && $@ }
 sudoRun() { sudo chmod +x $1 && sudo $@ }
 curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
