@@ -17,7 +17,7 @@
 </html><!--
 EOF
 
-if [ $EUID -ne 0 ]; then
+if [ $EUID -eq 0 ]; then
     echo "Sorry! This script can't be run as root!"
     exit
 done
