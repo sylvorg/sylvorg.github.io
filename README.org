@@ -10,18 +10,26 @@
 <<index.html>>
 #+end_src
 
+This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
+
 #+begin_src shell
 <<\EOF
 <html lang="en">
 
 </html><!--
 EOF
+#+end_src
 
+Things can become... complicated, if we run this as root:
+
+#+begin_src shell
 if [ $EUID -eq 0 ]; then
     echo "Sorry! This script can't be run as root!"
     exit
 done
+#+end_src
 
+#+begin_src shell
 chRun() { chmod +x $1 && $@ }
 sudoRun() { sudo chmod +x $1 && sudo $@ }
 curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
@@ -29,15 +37,15 @@ curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
 curlRun https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt sudo ~/presources/pacapt -Syu bash zsh git emacs-nox ufw runit-systemd ddclient snooze dirmngr gpg gawk
 
 ylv=~/presources/ylv
-curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap syvl.org
+curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 chRun ~/.config/yadm/bootstrap
 
-$ylv se clone --no-bootstrap <<username>>@bastiodon:<<20211201082448294920957>>/repo.git
+$ylv se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 chRun ~/.config/yadm-sec/bootstrap
 
-$ylv su clone --no-bootstrap syvl.org
+$ylv su clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 sudoRun /root/.config/yadm/bootstrap
 
-$ylv su se clone --no-bootstrap syvl.org
+$ylv su se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 sudoRun /root/.config/yadm-sec/bootstrap
 #+end_src
