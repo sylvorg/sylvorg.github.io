@@ -29,6 +29,12 @@ if [ $EUID -eq 0 ]; then
 done
 #+end_src
 
+Use this to make sure the bootstrap doesn't miss any future steps if past steps fail:
+
+#+begin_src shell
+set -eo pipefail
+#+end_src
+
 #+begin_src shell
 chRun() { chmod +x $1 && $@ }
 sudoRun() { sudo chmod +x $1 && sudo $@ }
