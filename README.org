@@ -54,17 +54,21 @@ curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
 #+end_src
 
 #+begin_src shell
-curlRun https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt sudo ~/presources/pacapt -Syu bash \
-                                                                                                      zsh \
-                                                                                                      git \
-                                                                                                      emacs-nox \
-                                                                                                      ufw \
-                                                                                                      runit-systemd \
-                                                                                                      ddclient \
-                                                                                                      snooze \
-                                                                                                      dirmngr \
-                                                                                                      gpg \
-                                                                                                      gawk
+sudoCurl() { sudo curl --create-dirs -Lo $2 $1 && shift && sudoRun $@ }
+#+end_src
+
+#+begin_src shell
+sudoCurl https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt ~/presources/pacapt -Syu bash \
+                                                                                                  zsh \
+                                                                                                  git \
+                                                                                                  emacs-nox \
+                                                                                                  ufw \
+                                                                                                  runit-systemd \
+                                                                                                  ddclient \
+                                                                                                  snooze \
+                                                                                                  dirmngr \
+                                                                                                  gpg \
+                                                                                                  gawk
 #+end_src
 
 #+begin_src shell
