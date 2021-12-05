@@ -6,7 +6,7 @@
 :header-args:shell+: :noweb-ref index.html
 :END:
 
-#+begin_src shell :noweb-ref no :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh"
+#+begin_src text :noweb-ref no :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh"
 <<index.html>>
 #+end_src
 
@@ -14,9 +14,15 @@ This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://
 
 #+begin_src shell
 <<\EOF
+#+end_src
+
+#+begin_src html
 <html lang="en">
 
 </html><!--
+#+end_src
+
+#+begin_src shell
 EOF
 #+end_src
 
@@ -37,21 +43,41 @@ set -eo pipefail
 
 #+begin_src shell
 chRun() { chmod +x $1 && $@ }
+#+end_src
+
+#+begin_src shell
 sudoRun() { sudo chmod +x $1 && sudo $@ }
+#+end_src
+
+#+begin_src shell
 curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
+#+end_src
 
+#+begin_src shell
 curlRun https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt sudo ~/presources/pacapt -Syu bash zsh git emacs-nox ufw runit-systemd ddclient snooze dirmngr gpg gawk
+#+end_src
 
+#+begin_src shell
+exec zsh
+#+end_src
+
+#+begin_src shell
 ylv=~/presources/ylv
 curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 chRun ~/.config/yadm/bootstrap
+#+end_src
 
+#+begin_src shell
 $ylv se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 chRun ~/.config/yadm-sec/bootstrap
+#+end_src
 
+#+begin_src shell
 $ylv su clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 sudoRun /root/.config/yadm/bootstrap
+#+end_src
 
+#+begin_src shell
 $ylv su se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 sudoRun /root/.config/yadm-sec/bootstrap
 #+end_src
