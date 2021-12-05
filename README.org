@@ -46,7 +46,7 @@ chRun() { chmod +x $1 && $@ }
 #+end_src
 
 #+begin_src shell
-sudoRun() { sudo chmod +x $1 && sudo $@ }
+sudoRun() { sudo chRun $@ }
 #+end_src
 
 #+begin_src shell
@@ -54,25 +54,38 @@ curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
 #+end_src
 
 #+begin_src shell
-sudoCurl() { sudo curl --create-dirs -Lo $2 $1 && shift && sudoRun $@ }
+sudoCurl() { sudo curlRun $@ }
 #+end_src
 
 #+begin_src shell
-sudoCurl https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt ~/presources/pacapt -Syu bash \
-                                                                                                  zsh \
-                                                                                                  git \
-                                                                                                  emacs-nox \
-                                                                                                  ufw \
-                                                                                                  runit-systemd \
-                                                                                                  ddclient \
-                                                                                                  snooze \
-                                                                                                  dirmngr \
-                                                                                                  gpg \
-                                                                                                  gawk
+sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -Syu bash \
+                                                                                              zsh \
+                                                                                              git
 #+end_src
 
 #+begin_src shell
 exec zsh
+#+end_src
+
+#+call: hash() :exports none
+
+#+RESULTS:
+: 20211205102311768149408
+
+#+name: 20211205102311768149408
+#+begin_src text :noweb-ref no
+ufw \
+runit-systemd \
+ddclient \
+snooze \
+dirmngr \
+gpg \
+gawk
+#+end_src
+
+#+begin_src zsh
+curlRun https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -iA master.emacs-nox \
+                                                                                             master.<<20211205102311768149408>>
 #+end_src
 
 #+begin_src zsh
