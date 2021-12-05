@@ -75,23 +75,23 @@ sudoCurl https://raw.githubusercontent.com/<<username>>/pacapt/ng/pacapt ~/preso
 exec zsh
 #+end_src
 
-#+begin_src shell
+#+begin_src zsh
 ylv=~/presources/ylv
 curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 chRun ~/.config/yadm/bootstrap
 #+end_src
 
-#+begin_src shell
+#+begin_src zsh
 $ylv se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 chRun ~/.config/yadm-sec/bootstrap
 #+end_src
 
-#+begin_src shell
+#+begin_src zsh
 $ylv su clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 sudoRun /root/.config/yadm/bootstrap
 #+end_src
 
-#+begin_src shell
+#+begin_src zsh
 $ylv su se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 sudoRun /root/.config/yadm-sec/bootstrap
 #+end_src
