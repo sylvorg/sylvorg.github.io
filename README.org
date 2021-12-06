@@ -58,7 +58,7 @@ sudoCurl() { sudo curlRun $@ }
 #+end_src
 
 #+begin_src shell
-sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -yyu
+sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -Syyu git
 #+end_src
 
 #+begin_src shell
