@@ -58,13 +58,11 @@ sudoCurl() { sudo curlRun $@ }
 #+end_src
 
 #+begin_src shell
-sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -Syu bash \
-                                                                                              zsh \
-                                                                                              git
+sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -yyu
 #+end_src
 
 #+begin_src shell
-exec zsh
+zsh <<'EOF'
 #+end_src
 
 #+call: hash() :exports none
@@ -113,4 +111,8 @@ sudoRun /root/.config/yadm/bootstrap
 #+begin_src zsh
 $ylv su se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
 sudoRun /root/.config/yadm-sec/bootstrap
+#+end_src
+
+#+begin_src shell
+EOF
 #+end_src
