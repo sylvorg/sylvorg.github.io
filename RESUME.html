@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-02-14 Mon 20:41 -->
+<!-- 2022-02-14 Mon 20:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Résumé</title>
@@ -34,6 +34,7 @@
 --font-size-small: 0.5rem;
 --font-size-xsmall: 0.25rem;
 --margins: 5rem;
+--smaller-margins: 2.5rem;
 --padding: 1rem;
 --header-padding: 0.25rem;
 --background-color: #222222;
@@ -67,9 +68,25 @@ body {
 background-color: var(--background-color);
 font-family: "Courier New", monospace;
 font-weight: 100;
+color: var(--joker-purple);
+}
+
+@media only screen and (min-width: 750px) /* Large screens */
+{
+html,
+body {
 margin-left: var(--margins);
 margin-right: var(--margins);
-color: var(--joker-purple);
+}
+}
+
+@media only screen and (max-width: 750px) /* Small screens */
+{
+html,
+body {
+margin-left: var(--smaller-margins);
+margin-right: var(--smaller-margins);
+}
 }
 
 ::selection {
@@ -322,21 +339,21 @@ text-decoration: var(--joker-purple) wavy line-through;
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgadb2165">General Information</a></li>
-<li><a href="#orgcb89617">Qualifications</a></li>
-<li><a href="#orgfd98f6f">Projects</a></li>
-<li><a href="#orga7b4402">References</a>
+<li><a href="#org6622143">General Information</a></li>
+<li><a href="#org7d9a118">Qualifications</a></li>
+<li><a href="#orgef9aba3">Projects</a></li>
+<li><a href="#org9b2261e">References</a>
 <ul>
-<li><a href="#orge2e7677">Neena Gupta</a></li>
+<li><a href="#orgeaa215a">Neena Gupta</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgadb2165" class="outline-2">
-<h2 id="orgadb2165">General Information</h2>
-<div class="outline-text-2" id="text-orgadb2165">
+<div id="outline-container-org6622143" class="outline-2">
+<h2 id="org6622143">General Information</h2>
+<div class="outline-text-2" id="text-org6622143">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -370,9 +387,9 @@ text-decoration: var(--joker-purple) wavy line-through;
 </div>
 </div>
 
-<div id="outline-container-orgcb89617" class="outline-2">
-<h2 id="orgcb89617">Qualifications</h2>
-<div class="outline-text-2" id="text-orgcb89617">
+<div id="outline-container-org7d9a118" class="outline-2">
+<h2 id="org7d9a118">Qualifications</h2>
+<div class="outline-text-2" id="text-org7d9a118">
 <ul class="org-ul">
 <li>Excellent Interpersonal Skills</li>
 <li>Well Organized</li>
@@ -430,9 +447,9 @@ text-decoration: var(--joker-purple) wavy line-through;
 </div>
 </div>
 
-<div id="outline-container-orgfd98f6f" class="outline-2">
-<h2 id="orgfd98f6f">Projects</h2>
-<div class="outline-text-2" id="text-orgfd98f6f">
+<div id="outline-container-orgef9aba3" class="outline-2">
+<h2 id="orgef9aba3">Projects</h2>
+<div class="outline-text-2" id="text-orgef9aba3">
 <ul class="org-ul">
 <li>Python
 <ul class="org-ul">
@@ -442,13 +459,13 @@ text-decoration: var(--joker-purple) wavy line-through;
 </div>
 </div>
 
-<div id="outline-container-orga7b4402" class="outline-2">
-<h2 id="orga7b4402">References</h2>
-<div class="outline-text-2" id="text-orga7b4402">
+<div id="outline-container-org9b2261e" class="outline-2">
+<h2 id="org9b2261e">References</h2>
+<div class="outline-text-2" id="text-org9b2261e">
 </div>
-<div id="outline-container-orge2e7677" class="outline-3">
-<h3 id="orge2e7677">Neena Gupta</h3>
-<div class="outline-text-3" id="text-orge2e7677">
+<div id="outline-container-orgeaa215a" class="outline-3">
+<h3 id="orgeaa215a">Neena Gupta</h3>
+<div class="outline-text-3" id="text-orgeaa215a">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -480,7 +497,7 @@ text-decoration: var(--joker-purple) wavy line-through;
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-02-14 Mon 20:41</p>
+<p class="date">Created: 2022-02-14 Mon 20:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
