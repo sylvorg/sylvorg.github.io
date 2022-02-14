@@ -1,0 +1,59 @@
+#+setupfile: ./settings/README.org
+#+title: Résumé
+
+* General Information
+
+~Name:~           Jeet Ray
+
+~E-mail Address:~ jeet.ray@syvl.org
+
+~Home Address:~   22 Longueuil Place, Whitby, ON, L1R 3G9
+
+~Phone Number:~   +1 (647) 785-0956
+
+* Qualifications
+
+- Excellent Interpersonal Skills
+- Well Organized
+- Punctual
+- 96.5 hours of volunteer work (detailed below)
+- Specialize in automation
+    - Python
+    - [[https://www.pypy.org/][PyPy]]
+    - [[https://docs.hylang.org/en/alpha/][Hylang]]
+- Specialize in immutable infrastructure:
+    - [[https://nixos.org/][Nix]]
+    - [[https://nixos.org/][NixOS]]
+- Familiar with version control systems:
+    - [[https://git-scm.com/][Git]]
+- Familiar with containerization software:
+    - [[https://www.docker.com/][Docker]]
+    - [[https://podman.io/][Podman]]
+- Familiar with backup and sync software:
+    - [[https://www.borgbackup.org/][Borg]]
+    - [[https://syncthing.net/][Syncthing]]
+- Familiar with [[https://en.wikipedia.org/wiki/Copy-on-write][copy-on-write filesystems]]:
+    - [[https://openzfs.org/wiki/Main_Page][ZFS]]
+- Familiar with network protocols:
+    - SSH
+- Familiar with basic and specialized command-line utilities:
+    - rsync
+    - [[https://github.com/chmln/sd][sd]]
+- Familiar with documentation formats:
+    - [[https://orgmode.org/][org-mode]]
+      
+      ~Note:~ I'm actually writing this résumé in ~org-mode~ right now!
+
+* Projects
+
+- Python
+    - [[https://github.com/shadowrylander/bakery][Bakery]]
+
+* References
+** Neena Gupta
+
+~Occupation:~ P. A. , Partner, Gowling WLG's Waterloo Region and Toronto offices
+
+~E-mail Address:~ neena.gupta@gowlingwlg.com
+
+~Phone Number:~ +1 (519) 577-5910
