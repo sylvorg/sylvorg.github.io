@@ -3,13 +3,10 @@
 
 * General Information
 
-~Name:~           Jeet Ray
-
-~E-mail Address:~ jeet.ray@syvl.org
-
-~Home Address:~   22 Longueuil Place, Whitby, ON, L1R 3G9
-
-~Phone Number:~   +1 (647) 785-0956
+| ~Name:~           | Jeet Ray                                |
+| ~E-mail Address:~ | jeet.ray@syvl.org                       |
+| ~Home Address:~   | 22 Longueuil Place, Whitby, ON, L1R 3G9 |
+| ~Phone Number:~   | +1 (647) 785-0956                       |
 
 * Qualifications
 
@@ -52,8 +49,6 @@
 * References
 ** Neena Gupta
 
-~Occupation:~ P. A. , Partner, Gowling WLG's Waterloo Region and Toronto offices
-
-~E-mail Address:~ neena.gupta@gowlingwlg.com
-
-~Phone Number:~ +1 (519) 577-5910
+| ~Occupation:~     | P. A. , Partner, Gowling WLG's Waterloo Region and Toronto offices |
+| ~E-mail Address:~ | neena.gupta@gowlingwlg.com                                         |
+| ~Phone Number:~   | +1 (519) 577-5910                                                  |
