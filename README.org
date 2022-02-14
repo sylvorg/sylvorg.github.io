@@ -1,6 +1,10 @@
 #+setupfile: ./settings/README.org
 
 * CNAME
+:PROPERTIES:
+:ID:       b2bb02de-0ced-4df2-a6f5-2734845e163f
+:CUSTOM_ID:       b2bb02de-0ced-4df2-a6f5-2734845e163f
+:END:
 
 #+begin_src text :tangle (meq/tangle-path)
 syvl.org
@@ -10,6 +14,8 @@ syvl.org
 :PROPERTIES:
 :header-args:shell+: :noweb-ref index.html
 :header-args:html+: :noweb-ref index.html
+:ID:       f3e32608-7200-4808-9d42-59112f32d395
+:CUSTOM_ID:       f3e32608-7200-4808-9d42-59112f32d395
 :END:
 
 #+name: 20220211011451344976852
