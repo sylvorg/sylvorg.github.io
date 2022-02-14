@@ -1,116 +1,35 @@
 #+setupfile: ./settings/README.org
 #+include: ./settings/README.org
 
+* CNAME
+
+#+begin_src text :tangle (meq/tangle-path)
+syvl.org
+#+end_src
+
 * index.html
 :PROPERTIES:
 :header-args:shell+: :noweb-ref index.html
+:header-args:html+: :noweb-ref index.html
 :END:
 
-#+begin_src text :noweb-ref no :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh"
+#+name: 20220211011451344976852
+#+begin_src emacs-lisp :eval never-export
+(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+#+end_src
+
+#+begin_src text :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh" :exports none
 <<index.html>>
 #+end_src
 
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-<<\EOF
+<<\EOF # This index file is also a shell script! Go to index.syvl.org to see what it can do!
 #+end_src
 
 #+begin_src html
-<html lang="en">
-
-</html><!--
-#+end_src
-
-#+begin_src shell
-EOF
-#+end_src
-
-Things can become... complicated, if we run this as root:
-
-#+begin_src shell
-if [ $EUID -eq 0 ]; then
-    echo "Sorry! This script can't be run as root!"
-    exit
-done
-#+end_src
-
-Use this to make sure the bootstrap doesn't miss any future steps if past steps fail:
-
-#+begin_src shell
-set -eo pipefail
-#+end_src
-
-#+begin_src shell
-chRun() { chmod +x $1 && $@ }
-#+end_src
-
-#+begin_src shell
-sudoRun() { sudo chRun $@ }
-#+end_src
-
-#+begin_src shell
-curlRun() { curl --create-dirs -Lo $2 $1 && shift && chRun $@ }
-#+end_src
-
-#+begin_src shell
-sudoCurl() { sudo curlRun $@ }
-#+end_src
-
-#+begin_src shell
-sudoCurl https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -Syyu git
-#+end_src
-
-#+begin_src shell
-zsh <<'EOF'
-#+end_src
-
-#+call: hash() :exports none
-
-#+RESULTS:
-: 20211205102311768149408
-
-#+name: 20211205102311768149408
-#+begin_src text :noweb-ref no
-ufw \
-runit-systemd \
-ddclient \
-snooze \
-dirmngr \
-gpg \
-gawk
-#+end_src
-
-#+begin_src zsh
-curlRun https://raw.githubusercontent.com/<<username>>/syvl/main/syvl ~/.local/syvl/syvl -iA master.emacs-nox \
-                                                                                             master.<<20211205102311768149408>>
-#+end_src
-
-#+begin_src zsh
-ylv=~/presources/ylv
-curlRun https://raw.githubusercontent.com/<<username>>/ylv/master/ylv $ylv clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
-chRun ~/.config/yadm/bootstrap
-#+end_src
-
-[[https://github.com/shadowrylander/shadowrylander/blob/main/oreo.aiern.org#functions][Source these functions:]]
-
-#+begin_src zsh
-source $root/resources/functions
-#+end_src
-
-#+begin_src zsh
-$ylv se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
-chRun ~/.config/yadm-sec/bootstrap
-#+end_src
-
-#+begin_src zsh
-$ylv su clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
-sudoRun /root/.config/yadm/bootstrap
-#+end_src
-
-#+begin_src zsh
-$ylv su se clone --no-bootstrap <<username>>@bastiodon:<<yadm-dir>>-sec/repo.git
-sudoRun /root/.config/yadm-sec/bootstrap
+<<20220211011451344976852()>><!--
 #+end_src
 
 #+begin_src shell
