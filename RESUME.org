@@ -13,7 +13,7 @@
 - Excellent Interpersonal Skills
 - Well Organized
 - Punctual
-- 96.5 hours of volunteer work (detailed below)
+- 96.5 hours of volunteer work (unrelated to computer science)
 - Specialize in automation
     - Python
     - [[https://www.pypy.org/][PyPy]]
