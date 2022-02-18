@@ -3,12 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-02-15 Tue 08:47 -->
+<!-- 2022-02-18 Fri 19:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Jeet Ray" />
+<link rel="stylesheet" type="text/css" href="https://raw.githack.com/shadowrylander/settings/main/src/styles/primary/syvl.css" />
 <link rel="icon" href="https://gitcdn.link/cdn/sylvorg/settings/main/src/icons/favicons/shiny-alolan-sandshrew.ico" sizes="any" />
 <link rel="icon" href="https://gitcdn.link/cdn/sylvorg/settings/main/src/icons/favicons/shiny-alolan-sandshrew.svg" />
 <link rel="manifest" href="https://raw.githack.com/sylvorg/settings/main/manifest.json" />
@@ -23,292 +24,6 @@
 <a href="https://resume.syvl.org">Résumé</a>
 <a href="https://index.syvl.org">Index</a>
 </div>
-<style>
-/* @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400'); */
-
-:root {
---font-size-1: 2rem;
---font-size-2: 1.5rem;
---font-size-3: 1.25rem;
---font-size-4: 1rem;
---font-size-small: 0.5rem;
---font-size-xsmall: 0.25rem;
---margins: 5rem;
---smaller-margins: 2.5rem;
---padding: 1rem;
---header-padding: 0.25rem;
---background-color: #222222;
---dracula-orange: #ffb86c;
---exo-ui-red: #ff5156;
---joker-purple: #be80ff;
---acid-green: #DFFF00;
-}
-
-.header {
-text-align: center;
-background: var(--background-color);
-font-size: var(--font-size-3);
-border-bottom: 1px solid var(--dracula-orange);
-padding-bottom: var(--padding);
-}
-
-/* More informatio [[https://developer.mozilla.org/en-US/docs/Web/CSS/:not][here]]: */
-.header>a:not(:last-child)::after {
-content: " |";
-}
-
-.header > a:link {
-color: var(--joker-purple);
-display: inline;
-text-decoration: none;
-}
-
-html,
-body {
-background-color: var(--background-color);
-font-family: "Courier New", monospace;
-font-weight: 100;
-color: var(--joker-purple);
-}
-
-@media only screen and (min-width: 750px) /* Large screens */
-{
-html,
-body {
-margin-left: var(--margins);
-margin-right: var(--margins);
-}
-}
-
-@media only screen and (max-width: 750px) /* Small screens */
-{
-html,
-body {
-margin-left: var(--smaller-margins);
-margin-right: var(--smaller-margins);
-}
-}
-
-::selection {
-background-color: var(--dracula-orange);
-color: var(--background-color);
-}
-
-h1 {
-font-size: var(--font-size-1);
-}
-
-h2 {
-font-size: var(--font-size-2);
-}
-
-h1>.subtitle,
-h3,
-h4,
-h5 {
-font-size: var(--font-size-3);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-font-weight: 300;
-letter-spacing: -0.03em;
-color: var(--dracula-orange);
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-border-bottom: 1px solid var(--joker-purple);
-width: fit-content;
-padding-bottom: var(--header-padding);
-}
-
-#table-of-contents {
-padding-bottom: var(--padding);
-border-bottom: 1px solid var(--dracula-orange);
-}
-
-#table-of-contents ul,
-#table-of-contents li {
-list-style-type: none;
-margin-top: var(--header-padding);
-margin-bottom: var(--header-padding);
-}
-
-#table-of-contents .tag {
-float: right;
-}
-
-#table-of-contents a:link {
-text-decoration: none;
-color: var(--joker-purple);
-}
-
-#table-of-contents a:hover {
-color: var(--exo-ui-red);
-}
-
-img {
-max-width: 100%;
-}
-
-blockquote {
-border-left: 0.2rem solid var(--dracula-orange);
-padding-left: 1rem;
-font-style: italic;
-}
-
-/* Adapted from [[https://css-tricks.com/forums/topic/need-help-to-override-font-color-for-blockquote/#post-99908][here]], and [[https://stackoverflow.com/users/3444240/potashin][potashin's]] answer [[https://stackoverflow.com/a/23631478/10827766][here]]: */
-blockquote>p {
-color: var(--exo-ui-red);
-}
-
-p,
-pre,
-ol,
-ul,
-table,
-code {
-color: var(--dracula-orange);
-}
-
-.done,
-.priority,
-.tag,
-.todo,
-code {
-color: var(--background-color);
-position: relative;
-bottom: .1rem;
-font-size: 80%;
-}
-
-.done,
-.priority,
-.todo,
-code {
-font-weight: 400;
-background-clip: padding-box;
-font-family: "Courier New", monospace;
-font-weight: bold;
-line-height: 1
-}
-
-.done,
-.priority,
-.tag>span,
-.todo,
-code {
-border-radius: 3px;
-padding-top: .1rem;
-padding-left: .3rem;
-padding-right: .3rem;
-line-height: 1;
-}
-
-.priority,
-.tag>span,
-.todo,
-code {
-background-image: linear-gradient(160deg, var(--dracula-orange), var(--exo-ui-red));
-}
-
-.on>code,
-.done {
-background-image: linear-gradient(160deg, var(--dracula-orange), var(--joker-purple));
-}
-
-.tag {
-top: .1rem;
-display: block;
-float: right;
-font-weight: 550;
-}
-
-.tag>span {
-text-transform: uppercase;
-}
-
-table,
-#table-of-contents {
-margin-bottom: var(--padding);
-}
-
-/* Even Table Row */
-
-tr:nth-child(even) {
-background-color: #2f1e2e;
-}
-
-.org-org-meta-line,
-.org-keyword {
-color: var(--dracula-orange);
-}
-
-a:link,
-a:hover,
-a:visited,
-a:visited:hover {
-text-decoration: none;
-}
-
-a:link {
-color: var(--acid-green);
-}
-
-a:visited {
-color: var(--joker-purple);
-}
-
-/* Adapted from [[https://stackoverflow.com/users/3246606/harry-the-mad-lurker][Harry The Mad Lurker's]] answer [[https://stackoverflow.com/a/21977877/10827766][here]]: */
-a:hover,
-a:visited:hover {
-color: var(--exo-ui-red);
-}
-
-/* Adapted from [[https://css-tricks.com/forums/topic/need-help-to-override-font-color-for-blockquote/#post-99908][here]], and [[https://stackoverflow.com/users/3444240/potashin][potashin's]] answer [[https://stackoverflow.com/a/23631478/10827766][here]]: */
-#postamble :not(:last-child)::after {
-content: " |";
-}
-
-#postamble>p {
-display: inline;
-}
-
-#postamble {
-text-align: center;
-width: 100%;
-font-size: var(--font-size-4)
-}
-
-.status {
-padding: var(--padding);
-border-top: 1px solid var(--dracula-orange);
-text-align: center;
-}
-
-.outline-text-2,
-.outline-text-3,
-.outline-text-4 {
-max-width: 100%;
-overflow-x: auto;
-}
-
-.underline {
-text-decoration: var(--exo-ui-red) wavy underline;
-}
-
-del {
-text-decoration: var(--joker-purple) wavy line-through;
-}
-</style>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -358,7 +73,7 @@ text-decoration: var(--joker-purple) wavy line-through;
 <h2 id="f3e32608-7200-4808-9d42-59112f32d395">index.html</h2>
 <div class="outline-text-2" id="text-f3e32608-7200-4808-9d42-59112f32d395">
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org882ff3b">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org9c28285">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -385,7 +100,7 @@ This was adapted from <a href="https://ellipsis.sh/">ellipsis.sh</a>, raw file <
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-02-15 Tue 08:47</p>
+<p class="date">Created: 2022-02-18 Fri 19:38</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
