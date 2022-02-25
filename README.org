@@ -6,7 +6,7 @@
 :CUSTOM_ID:       b2bb02de-0ced-4df2-a6f5-2734845e163f
 :END:
 
-#+begin_src text :tangle (meq/tangle-path)
+#+begin_src plaintext :tangle (meq/tangle-path)
 syvl.org
 #+end_src
 
@@ -23,7 +23,7 @@ syvl.org
 (with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 #+end_src
 
-#+begin_src text :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh" :exports none
+#+begin_src plaintext :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh" :exports none
 <<index.html>>
 #+end_src
 
@@ -39,4 +39,11 @@ This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://
 
 #+begin_src shell
 EOF
+#+end_src
+
+#+begin_src shell
+yadm clone https://github.com/<<username>>/home.git
+GIT_SSL_NO_VERIFY=1 yadm submodule update --init --depth 1 --recursive --remote --force
+yadm config include.path "$HOME/.gitconfig"
+yadm remote set-url --push origin git@github.com:<<username>>/home.git
 #+end_src
