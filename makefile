@@ -16,4 +16,6 @@ commit:
 push:
 |git -C $(mkfileDir) push
 
-super-push: commit push
+cpush: commit push
+
+super-push: et cpush
