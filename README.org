@@ -45,11 +45,17 @@ EOF
 #+end_src
 
 #+begin_src shell
-yadm clone https://github.com/<<username>>/home.git
+yadm clone --no-bootstrap https://github.com/<<username>>/home.git
 GIT_SSL_NO_VERIFY=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:<<username>>/home.git
 make -f "$HOME/.emacs.d/makefile" soft-init
+
+sudo yadm clone --no-bootstrap https://github.com/<<username>>/home.git
+GIT_SSL_NO_VERIFY=1 sudo yadm submodule update --init --depth 1 --recursive --remote --force
+sudo yadm config include.path "$HOME/.gitconfig"
+sudo yadm remote set-url --push origin git@github.com:<<username>>/home.git
+sudo make -f "$HOME/.emacs.d/makefile" soft-init
 #+end_src
 
 * makefile
