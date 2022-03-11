@@ -14,6 +14,7 @@ syvl.org
 :PROPERTIES:
 :header-args:shell+: :noweb-ref index.html
 :header-args:html+: :noweb-ref index.html
+:header-args:nix+: :noweb-ref index.html
 :ID:       f3e32608-7200-4808-9d42-59112f32d395
 :CUSTOM_ID:       f3e32608-7200-4808-9d42-59112f32d395
 :END:
@@ -23,15 +24,13 @@ syvl.org
 (with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 #+end_src
 
-#+begin_src plaintext :tangle (meq/tangle-path) :shebang "#! /usr/bin/env nix-shell" :exports none
+#+begin_src plaintext :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh" :exports none
 <<index.html>>
 #+end_src
 
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-#! nix-shell -i sh -p yadm
-#! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 # This index file is also a shell script! Go to index.syvl.org to see what it can do!
 <<\EOF
 #+end_src
@@ -45,13 +44,36 @@ EOF
 #+end_src
 
 #+begin_src shell
-yadm clone --no-bootstrap https://github.com/<<username>>/home.git
+nix-shell - <<\EOF
+#+end_src
+
+#+begin_src nix
+with import (fetchGit {
+    url = "https://github.com/<<username>>/nixpkgs";
+    ref = "j";
+    rev = "d5b8a4f80bf731183ee32a0357c1313cfd8c29e5";
+}) {}; {
+    buildInputs = [ yadm ];
+    shellHook = ''
+#+end_src
+
+#+begin_src shell
+yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
 GIT_SSL_NO_VERIFY=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
-yadm remote set-url --push origin git@github.com:<<username>>/home.git
+yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 make -f "$HOME/.emacs.d/makefile" soft-init
 chmod +x "$HOME/.config/yadm/bootstrap"
 "$HOME/.config/yadm/bootstrap"
+#+end_src
+
+#+begin_src nix
+    '';
+}
+#+end_src
+
+#+begin_src shell
+EOF
 #+end_src
 
 * makefile
