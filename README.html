@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-11 Fri 23:26 -->
+<!-- 2022-03-11 Fri 23:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -55,7 +55,7 @@
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#orgc62de65">makefile</a></li>
+<li><a href="#orgd5f9fb3">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -74,7 +74,7 @@
 <h2 id="f3e32608-7200-4808-9d42-59112f32d395">index.html</h2>
 <div class="outline-text-2" id="text-f3e32608-7200-4808-9d42-59112f32d395">
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org9884a9a">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orgdc1a445">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -115,7 +115,7 @@ This was adapted from <a href="https://ellipsis.sh/">ellipsis.sh</a>, raw file <
 
 <div class="org-src-container">
 <pre><code class="language-sh match-braces rainbow-braces">yadm clone --no-bootstrap https://github.com/shadowrylander/shadowrylander.git 2&gt; /dev/null
-GIT_SSL_NO_VERIFY=1 git -C ~/.local/share/yadm/repo.git submodule update --init --depth 1 --recursive --remote --force
+GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:shadowrylander/shadowrylander.git
 make -f "$HOME/.emacs.d/makefile" soft-init
@@ -137,9 +137,9 @@ chmod +x "$HOME/.config/yadm/bootstrap"
 </div>
 </div>
 
-<div id="outline-container-orgc62de65" class="outline-2">
-<h2 id="orgc62de65">makefile</h2>
-<div class="outline-text-2" id="text-orgc62de65">
+<div id="outline-container-orgd5f9fb3" class="outline-2">
+<h2 id="orgd5f9fb3">makefile</h2>
+<div class="outline-text-2" id="text-orgd5f9fb3">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := et
@@ -169,7 +169,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-03-11 Fri 23:26</p>
+<p class="date">Created: 2022-03-11 Fri 23:28</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
