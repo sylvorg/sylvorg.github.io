@@ -57,8 +57,8 @@ with import (fetchTarball {
 #+end_src
 
 #+begin_src shell
-yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
-GIT_SSL_NO_VERIFY=1 yadm submodule update --init --depth 1 --recursive --remote --force
+yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git 2> /dev/null
+GIT_SSL_NO_VERIFY=1 git -C ~/.local/share/yadm/repo.git submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 make -f "$HOME/.emacs.d/makefile" soft-init
