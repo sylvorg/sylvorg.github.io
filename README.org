@@ -52,7 +52,7 @@ with import (fetchGit {
     url = "https://github.com/<<username>>/nixpkgs";
     ref = "j";
     rev = "d5b8a4f80bf731183ee32a0357c1313cfd8c29e5";
-}) {}; {
+}) {}; mkShell {
     buildInputs = [ yadm ];
     shellHook = ''
 #+end_src
