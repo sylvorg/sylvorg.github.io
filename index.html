@@ -58,7 +58,7 @@
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#org4aa25b5">makefile</a></li>
+<li><a href="#org60224a2">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -77,7 +77,7 @@
 <h2 id="f3e32608-7200-4808-9d42-59112f32d395">index.html</h2>
 <div class="outline-text-2" id="text-f3e32608-7200-4808-9d42-59112f32d395">
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orga5f4c9d">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org8ef101a">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -111,7 +111,7 @@ This was adapted from <a href="https://ellipsis.sh/">ellipsis.sh</a>, raw file <
     url = "https://github.com/shadowrylander/nixpkgs/archive/d5b8a4f80bf731183ee32a0357c1313cfd8c29e5.tar.gz";
     sha256 = "1fd665gz0h9sldsy683f1kvlgngv2sx79myb3v7r2hmsf0lbl8cg";
 }) {}; mkShell {
-    buildInputs = [ yadm ];
+    buildInputs = [ yadm git ];
     shellHook = ''
 </code></pre>
 </div>
@@ -140,9 +140,9 @@ chmod +x "$HOME/.config/yadm/bootstrap"
 </div>
 </div>
 
-<div id="outline-container-org4aa25b5" class="outline-2">
-<h2 id="org4aa25b5">makefile</h2>
-<div class="outline-text-2" id="text-org4aa25b5">
+<div id="outline-container-org60224a2" class="outline-2">
+<h2 id="org60224a2">makefile</h2>
+<div class="outline-text-2" id="text-org60224a2">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := et
@@ -184,7 +184,7 @@ with import (fetchTarball {
     url = "https://github.com/shadowrylander/nixpkgs/archive/d5b8a4f80bf731183ee32a0357c1313cfd8c29e5.tar.gz";
     sha256 = "1fd665gz0h9sldsy683f1kvlgngv2sx79myb3v7r2hmsf0lbl8cg";
 }) {}; mkShell {
-    buildInputs = [ yadm ];
+    buildInputs = [ yadm git ];
     shellHook = ''
 yadm clone --no-bootstrap https://github.com/shadowrylander/shadowrylander.git 2> /dev/null
 GIT_SSL_NO_VERIFY=1 git -C ~/.local/share/yadm/repo.git --work-tree ~ submodule update --init --depth 1 --recursive --remote --force
