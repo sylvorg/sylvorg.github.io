@@ -21,7 +21,7 @@ syvl.org
 
 #+name: 58b62ef7-d880-4cc4-9d4d-9d0e76983d2f
 #+begin_src text
-yadm git gnumake
+yadm git gnumake fd
 #+end_src
 
 #+name: 4751ce0e-6018-4f00-8c6d-89f43c3fb792
@@ -58,6 +58,7 @@ ensure () {
         [ -z "$2" ] && nix-env -i "$2" || nix-env -i "$1"
     fi
 }
+remove () { [ -z "$2" ] && nix-env -e "$2" || nix-env -e "$1"; }
 
 for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do ensure $p; done
 
@@ -71,7 +72,7 @@ make -f "$HOME/.emacs.d/makefile" soft-init
 chmod +x "$HOME/.config/yadm/bootstrap"
 "$HOME/.config/yadm/bootstrap"
 
-for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do nix-env -e $p; done
+for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do remove $p; done
 #+end_src
 
 * makefile
