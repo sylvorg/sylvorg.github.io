@@ -44,22 +44,25 @@ EOF
 #+end_src
 
 #+begin_src shell
-fail () { set -eo pipefail; }
+setFail () { set -eo pipefail; }
+ensure () {
+    hash "$1" 2> /dev/null
+    if [ $? -ne 0 ]; then
+        hash nix 2> /dev/null
+        [ $? -ne 0 ] && sh <(curl -fsSL https://nixos.org/nix/install) --daemon || :
+        [ -z "$2" ] && nix-env -i "$2" || nix-env -i "$1"
+    fi
+}
 
-hash yadm 2> /dev/null
-if [ $? -ne 0 ]; then
-    hash nix 2> /dev/null
-    fail
-    if [ $? -ne 0 ]; then sh <(curl -fsSL https://nixos.org/nix/install) --daemon; fi
-    nix-env -i yadm
-fi
-fail
+for p in yadm git; do ensure $p; done
+
+setFail
+
 yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git || :
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 make -f "$HOME/.emacs.d/makefile" soft-init
-sudo systemctl restart emacs
 chmod +x "$HOME/.config/yadm/bootstrap"
 "$HOME/.config/yadm/bootstrap"
 #+end_src
