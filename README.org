@@ -21,7 +21,7 @@ syvl.org
 
 #+name: 58b62ef7-d880-4cc4-9d4d-9d0e76983d2f
 #+begin_src text
-yadm git gnumake fd
+yadm git "make gnumake" fd
 #+end_src
 
 #+name: 4751ce0e-6018-4f00-8c6d-89f43c3fb792
