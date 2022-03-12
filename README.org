@@ -19,6 +19,8 @@ syvl.org
 :CUSTOM_ID:       f3e32608-7200-4808-9d42-59112f32d395
 :END:
 
+Programs necessary for the bootstrap:
+
 #+name: 58b62ef7-d880-4cc4-9d4d-9d0e76983d2f
 #+begin_src text
 yadm git "make gnumake" fd emacs
@@ -55,10 +57,10 @@ ensure () {
     if [ $? -ne 0 ]; then
         hash nix 2> /dev/null
         [ $? -ne 0 ] && sh <(curl -fsSL https://nixos.org/nix/install) --daemon
-        [ -z "$2" ] && nix-env -i "$2" || nix-env -i "$1"
+        [ -z "$2" ] && nix-env -i "$1" || nix-env -i "$2"
     fi
 }
-remove () { [ -z "$2" ] && nix-env -e "$2" || nix-env -e "$1"; }
+remove () { [ -z "$2" ] && nix-env -e "$1" || nix-env -e "$2"; }
 
 for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do ensure $p; done
 
