@@ -1,5 +1,5 @@
 .RECIPEPREFIX := |
-.DEFAULT_GOAL := et
+.DEFAULT_GOAL := super-push
 
 # Adapted From: https://www.systutorials.com/how-to-get-the-full-path-and-directory-of-a-makefile-itself/
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))

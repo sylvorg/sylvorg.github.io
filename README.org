@@ -44,19 +44,12 @@ EOF
 #+end_src
 
 #+begin_src shell
-nix-shell - <<\EOF
-#+end_src
-
-#+begin_src nix
-with import (fetchTarball {
-    url = "https://github.com/<<username>>/nixpkgs/archive/d5b8a4f80bf731183ee32a0357c1313cfd8c29e5.tar.gz";
-    sha256 = "1fd665gz0h9sldsy683f1kvlgngv2sx79myb3v7r2hmsf0lbl8cg";
-}) {}; mkShell {
-    buildInputs = [ yadm git ];
-    shellHook = ''
-#+end_src
-
-#+begin_src shell
+hash yadm 2> /dev/null
+if [ $? -ne 0 ]; then
+    hash nix 2> /den/null
+    if [ $? -ne 0 ]; then sh <(curl -fsSL https://nixos.org/nix/install) --daemon; fi
+    nix-env -i yadm
+fi
 yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git 2> /dev/null
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
@@ -66,20 +59,11 @@ chmod +x "$HOME/.config/yadm/bootstrap"
 "$HOME/.config/yadm/bootstrap"
 #+end_src
 
-#+begin_src nix
-    '';
-}
-#+end_src
-
-#+begin_src shell
-EOF
-#+end_src
-
 * makefile
 
 #+begin_src makefile :tangle (meq/tangle-path)
 .RECIPEPREFIX := |
-.DEFAULT_GOAL := et
+.DEFAULT_GOAL := super-push
 
 # Adapted From: https://www.systutorials.com/how-to-get-the-full-path-and-directory-of-a-makefile-itself/
 mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
