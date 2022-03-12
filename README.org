@@ -69,6 +69,8 @@ setFail
 yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git || :
 yadm decrypt
 cat "$HOME/.config/yadm/encrypt" | xargs -L1 chown -R $(whoami):$(whoami)
+chmod 700 "$HOME/.ssh"
+chmod 600 "$HOME/.ssh/*"
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
 yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
