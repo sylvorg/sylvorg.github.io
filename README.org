@@ -67,13 +67,18 @@ for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do ensure $p; done
 setFail
 
 yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git || :
-yadm decrypt
-cat "$HOME/.config/yadm/encrypt" | xargs -L1 chown -R $(whoami):$(whoami)
-chmod 700 "$HOME/.ssh"
-chmod 600 "$HOME/.ssh/*"
-GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
-yadm config include.path "$HOME/.gitconfig"
 yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
+nixos-generate-config || :
+
+subinit="submodule update --init --depth 1 --recursive --remote --force"
+
+read secrets
+yadm sec clone --no-bootstrap $secrets
+GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
+chmod +x "$HOME/.config/yadm-sec/bootstrap"
+"$HOME/.config/yadm-sec/bootstrap"
+
+GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm $subinit
 make -f "$HOME/.emacs.d/makefile" soft-init
 chmod +x "$HOME/.config/yadm/bootstrap"
 "$HOME/.config/yadm/bootstrap"
