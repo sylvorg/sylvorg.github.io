@@ -71,12 +71,22 @@ yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 nixos-generate-config || :
 
 subinit="submodule update --init --depth 1 --recursive --remote --force"
+#+end_src
 
-read -p $"Tell me your secrets!\n" secrets < /dev/tty
-yadm sec clone --no-bootstrap $secrets
-GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
-chmod +x "$HOME/.config/yadm-sec/bootstrap"
-"$HOME/.config/yadm-sec/bootstrap"
+Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
+and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]]:
+
+#+begin_src shell
+read -p $'Tell me your secrets!\n' secrets < /dev/tty
+#+end_src
+
+#+begin_src shell
+if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
+    yadm sec clone --no-bootstrap $secrets || :
+    GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
+    chmod +x "$HOME/.config/yadm-sec/bootstrap"
+    "$HOME/.config/yadm-sec/bootstrap"
+fi
 
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm $subinit
 make -f "$HOME/.emacs.d/makefile" soft-init
