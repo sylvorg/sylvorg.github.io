@@ -31,7 +31,7 @@ yadm git "make gnumake" fd emacs
 (with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 #+end_src
 
-#+begin_src plaintext :tangle (meq/tangle-path) :shebang "#!/usr/bin/env sh" :exports none
+#+begin_src plaintext :tangle (meq/tangle-path) :exports none
 <<index.html>>
 #+end_src
 
@@ -72,8 +72,7 @@ nixos-generate-config || :
 
 subinit="submodule update --init --depth 1 --recursive --remote --force"
 
-read secrets
-chmod +x "$HOME/.config/git/scripts/*"
+read -p "Tell me your secrets!" secrets < /dev/tty
 yadm sec clone --no-bootstrap $secrets
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
 chmod +x "$HOME/.config/yadm-sec/bootstrap"
