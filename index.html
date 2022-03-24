@@ -6,7 +6,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-14 Mon 00:19 -->
+<!-- 2022-03-24 Thu 18:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -58,7 +58,7 @@
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#org67abfff">makefile</a></li>
+<li><a href="#orgf2a0833">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -81,12 +81,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org78b6c69">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="orge0292eb">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org2e24af9">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org8f5191a">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -133,6 +133,7 @@ nixos-generate-config || :
 subinit="submodule update --init --depth 1 --recursive --remote --force"
 
 read secrets
+chmod +x "$HOME/.config/git/scripts/*"
 yadm sec clone --no-bootstrap $secrets
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
 chmod +x "$HOME/.config/yadm-sec/bootstrap"
@@ -149,9 +150,9 @@ chmod +x "$HOME/.config/yadm/bootstrap"
 </div>
 </div>
 
-<div id="outline-container-org67abfff" class="outline-2">
-<h2 id="org67abfff">makefile</h2>
-<div class="outline-text-2" id="text-org67abfff">
+<div id="outline-container-orgf2a0833" class="outline-2">
+<h2 id="orgf2a0833">makefile</h2>
+<div class="outline-text-2" id="text-orgf2a0833">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -181,7 +182,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-03-14 Mon 00:19</p>
+<p class="date">Created: 2022-03-24 Thu 18:09</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
@@ -210,6 +211,7 @@ nixos-generate-config || :
 subinit="submodule update --init --depth 1 --recursive --remote --force"
 
 read secrets
+chmod +x "$HOME/.config/git/scripts/*"
 yadm sec clone --no-bootstrap $secrets
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
 chmod +x "$HOME/.config/yadm-sec/bootstrap"

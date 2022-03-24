@@ -73,6 +73,7 @@ nixos-generate-config || :
 subinit="submodule update --init --depth 1 --recursive --remote --force"
 
 read secrets
+chmod +x "$HOME/.config/git/scripts/*"
 yadm sec clone --no-bootstrap $secrets
 GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm sec $subinit
 chmod +x "$HOME/.config/yadm-sec/bootstrap"
