@@ -38,7 +38,6 @@ yadm git "make gnumake" fd emacs
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-# This index file is also a shell script! Go to index.syvl.org to see what it can do!
 <<\EOF
 #+end_src
 
