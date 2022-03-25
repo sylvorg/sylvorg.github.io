@@ -65,38 +65,48 @@ remove () { [ -z "$2" ] && nix-env -e "$1" || nix-env -e "$2"; }
 for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do ensure $p; done
 
 setFail
-
-yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git || :
-yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-
-# TODO: May need `yadm stash' here
-# yadm stash
-
-nixos-generate-config || :
 #+end_src
 
 Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
 and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]]:
 
 #+begin_src shell
-read -p $'Tell me your secrets!\n' secrets < /dev/tty
+read -p $'Yadm clone?\n' yc < /dev/tty
 #+end_src
 
 #+begin_src shell
+if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
+    yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
+    yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
+fi
+
+# TODO: May need `yadm stash' here
+# yadm stash
+
+nixos-generate-config || :
+
+read -p $'Tell me your secrets!\n' secrets < /dev/tty
 if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
     yadm sec clone --no-bootstrap $secrets || :
 
-    # TODO: May need `yadm stash' here
-    # yadm stash
+    # TODO: May need `yadm sec stash' here
+    # yadm sec stash
 
     chmod +x "$HOME/.config/yadm-sec/bootstrap"
     "$HOME/.config/yadm-sec/bootstrap"
 fi
 
-GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
-make -f "$HOME/.emacs.d/makefile" soft-init
-chmod +x "$HOME/.config/yadm/bootstrap"
-"$HOME/.config/yadm/bootstrap"
+read -p $'Initialize Yadm Submodules?\n' ys < /dev/tty
+if [ "$ys" == "y" ] || [ "$ys" == "yes" ]; then
+    GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
+    make -f "$HOME/.emacs.d/makefile" soft-init
+fi
+
+read -p $'Bootstrap?\n' bootstrap < /dev/tty
+if [ "$bootstrap" == "y" ] | [ "$bootstrap" == "yes" ]; then
+    chmod +x "$HOME/.config/yadm/bootstrap"
+    "$HOME/.config/yadm/bootstrap"
+fi
 
 # for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do remove $p; done
 #+end_src
