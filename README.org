@@ -93,7 +93,7 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     fi
 
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-    yadm gitconfig --unset core.worktree
+    yadm gitconfig core.worktree $HOME
 
     # TODO: May need `yadm stash' here
     # yadm stash
@@ -113,7 +113,7 @@ if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
         yadm sec clone $secCloneCommand
     fi
 
-    yadm sec gitconfig --unset core.worktree
+    yadm sec gitconfig core.worktree $HOME
 
     # TODO: May need `yadm sec stash' here
     # yadm sec stash
