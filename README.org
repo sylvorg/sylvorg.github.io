@@ -93,7 +93,7 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     fi
 
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-    yadm gitconfg --unset core.worktree
+    yadm gitconfig --unset core.worktree
 
     # TODO: May need `yadm stash' here
     # yadm stash
