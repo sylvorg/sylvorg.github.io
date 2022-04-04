@@ -93,7 +93,6 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     fi
 
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-    yadm gitconfig core.worktree $HOME
 
     # TODO: May need `yadm stash' here
     # yadm stash
@@ -124,7 +123,11 @@ fi
 
 read -p $'Initialize Yadm Submodules?\n' ys < /dev/tty
 if [ "$ys" == "y" ] || [ "$ys" == "yes" ]; then
+    if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
+        yadm gitconfig core.worktree $worktree
+    fi
     GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm submodule update --init --depth 1 --recursive --remote --force
+    yadm gitconfig core.worktree $HOME
     make -f "$HOME/.emacs.d/makefile" soft-init
 fi
 
