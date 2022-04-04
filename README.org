@@ -93,9 +93,7 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     fi
 
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-
-    # TODO: May need `yadm stash' here
-    # yadm stash
+    yadm stash
 fi
 
 nixos-generate-config || :
@@ -113,9 +111,7 @@ if [ "$secrets" != "n" ] && [ "$secrets" != "no" ]; then
     fi
 
     yadm sec gitconfig core.worktree $HOME
-
-    # TODO: May need `yadm sec stash' here
-    # yadm sec stash
+    yadm sec stash
 
     chmod +x "$HOME/.config/yadm-sec/bootstrap"
     "$HOME/.config/yadm-sec/bootstrap"
@@ -123,9 +119,12 @@ fi
 
 read -p $'Initialize Yadm Submodules?\n' ys < /dev/tty
 if [ "$ys" == "y" ] || [ "$ys" == "yes" ]; then
+    if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
+        yadm gitconfig core.worktree $worktree
+    fi
     GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm -C $worktree submodule update --init --depth 1 --recursive --remote --force
     yadm gitconfig core.worktree $HOME
-    make -f "$HOME/.emacs.d/makefile" soft-init
+    make -f "$worktree/.emacs.d/makefile" soft-init
 fi
 
 read -p $'Bootstrap?\n' bootstrap < /dev/tty
