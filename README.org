@@ -102,7 +102,7 @@ nixos-generate-config || :
 
 read -p $'Tell me your secrets!\n' secrets < /dev/tty
 secCloneCommand="-w $worktree --no-bootstrap $secrets"
-if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
+if [ "$secrets" != "n" ] && [ "$secrets" != "no" ]; then
     if [ -d "$HOME/.local/share/yadm-sec/repo.git" ]; then
         read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
         if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
@@ -123,9 +123,6 @@ fi
 
 read -p $'Initialize Yadm Submodules?\n' ys < /dev/tty
 if [ "$ys" == "y" ] || [ "$ys" == "yes" ]; then
-    if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
-        yadm gitconfig core.worktree $worktree
-    fi
     GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm -C $worktree submodule update --init --depth 1 --recursive --remote --force
     yadm gitconfig core.worktree $HOME
     make -f "$HOME/.emacs.d/makefile" soft-init
