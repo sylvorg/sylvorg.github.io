@@ -80,10 +80,10 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
         read -p $'Repo already exists! Force clone?\n' fc < /dev/tty
         if [ "$fc" == "y" ] || [ "$fc" == "yes" ]; then
-            yadm clone -f $cloneCommand
+            yadm clone -f "$cloneCommand"
         fi
     else
-        yadm clone $cloneCommand
+        yadm clone "$cloneCommand"
     fi
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 fi
@@ -99,10 +99,10 @@ if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
     if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
         read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
         if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
-            yadm sec clone -f $secCloneCommand
+            yadm sec clone -f "$secCloneCommand"
         fi
     else
-        yadm sec clone $secCloneCommand
+        yadm sec clone "$secCloneCommand"
     fi
 
     # TODO: May need `yadm sec stash' here
