@@ -5,7 +5,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-04-04 Mon 02:51 -->
+<!-- 2022-04-04 Mon 03:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -57,7 +57,7 @@
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#org6fdc71f">makefile</a></li>
+<li><a href="#orgb32fc0d">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -80,12 +80,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="orgde36657">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org544335f">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org3fb8d2b">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orgb78166b">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -154,18 +154,20 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     else
 	yadm clone $cloneCommand
     fi
-    yadm remote set-url --push origin git@github.com:shadowrylander/shadowrylander.git
-fi
 
-# TODO: May need `yadm stash' here
-# yadm stash
+    yadm remote set-url --push origin git@github.com:shadowrylander/shadowrylander.git
+    yadm gitconfg --unset core.worktree
+
+    # TODO: May need `yadm stash' here
+    # yadm stash
+fi
 
 nixos-generate-config || :
 
 read -p $'Tell me your secrets!\n' secrets &lt; /dev/tty
 secCloneCommand="-w $worktree --no-bootstrap $secrets"
 if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
-    if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
+    if [ -d "$HOME/.local/share/yadm-sec/repo.git" ]; then
 	read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets &lt; /dev/tty
 	if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
 	    yadm sec clone -f $secCloneCommand
@@ -173,6 +175,8 @@ if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
     else
 	yadm sec clone $secCloneCommand
     fi
+
+    yadm sec gitconfg --unset core.worktree
 
     # TODO: May need `yadm sec stash' here
     # yadm sec stash
@@ -199,9 +203,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org6fdc71f" class="outline-2">
-<h2 id="org6fdc71f">makefile</h2>
-<div class="outline-text-2" id="text-org6fdc71f">
+<div id="outline-container-orgb32fc0d" class="outline-2">
+<h2 id="orgb32fc0d">makefile</h2>
+<div class="outline-text-2" id="text-orgb32fc0d">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -231,7 +235,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-04-04 Mon 02:51</p>
+<p class="date">Created: 2022-04-04 Mon 03:13</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
@@ -269,18 +273,20 @@ if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     else
         yadm clone $cloneCommand
     fi
-    yadm remote set-url --push origin git@github.com:shadowrylander/shadowrylander.git
-fi
 
-# TODO: May need `yadm stash' here
-# yadm stash
+    yadm remote set-url --push origin git@github.com:shadowrylander/shadowrylander.git
+    yadm gitconfg --unset core.worktree
+
+    # TODO: May need `yadm stash' here
+    # yadm stash
+fi
 
 nixos-generate-config || :
 
 read -p $'Tell me your secrets!\n' secrets < /dev/tty
 secCloneCommand="-w $worktree --no-bootstrap $secrets"
 if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
-    if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
+    if [ -d "$HOME/.local/share/yadm-sec/repo.git" ]; then
         read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
         if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
             yadm sec clone -f $secCloneCommand
@@ -288,6 +294,8 @@ if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
     else
         yadm sec clone $secCloneCommand
     fi
+
+    yadm sec gitconfg --unset core.worktree
 
     # TODO: May need `yadm sec stash' here
     # yadm sec stash
