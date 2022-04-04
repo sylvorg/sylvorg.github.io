@@ -71,18 +71,25 @@ Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] ans
 and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]]:
 
 #+begin_src shell
-read -p $'Yadm clone?\n' yc < /dev/tty
+read -p $'Impermanent?\n' impermanent < /dev/tty
+if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
+    worktree="/persist/$HOME"
+else
+    worktree="$HOME"
+fi
 #+end_src
 
 #+begin_src shell
+read -p $'Yadm clone?\n' yc < /dev/tty
+cloneCommand="-w $worktree --no-bootstrap https://github.com/<<username>>/<<username>>.git"
 if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
     if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
         read -p $'Repo already exists! Force clone?\n' fc < /dev/tty
         if [ "$fc" == "y" ] || [ "$fc" == "yes" ]; then
-            yadm clone -f --no-bootstrap https://github.com/<<username>>/<<username>>.git
+            yadm clone -f $cloneCommand
         fi
     else
-        yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
+        yadm clone $cloneCommand
     fi
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 fi
@@ -93,14 +100,15 @@ fi
 nixos-generate-config || :
 
 read -p $'Tell me your secrets!\n' secrets < /dev/tty
+secCloneCommand="-w $worktree --no-bootstrap $secrets"
 if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
     if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
         read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
         if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
-            yadm sec clone -f --no-bootstrap $secrets
+            yadm sec clone -f $secCloneCommand
         fi
     else
-        yadm sec clone --no-bootstrap $secrets
+        yadm sec clone $secCloneCommand
     fi
 
     # TODO: May need `yadm sec stash' here
