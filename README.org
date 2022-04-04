@@ -75,8 +75,16 @@ read -p $'Yadm clone?\n' yc < /dev/tty
 #+end_src
 
 #+begin_src shell
+cloneCommand = "--no-bootstrap https://github.com/<<username>>/<<username>>.git"
 if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
-    yadm clone --no-bootstrap https://github.com/<<username>>/<<username>>.git
+    if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
+        read -p $'Repo already exists! Force clone?\n' fc < /dev/tty
+        if [ "$fc" == "y" ] || [ "$fc" == "yes" ]; then
+            yadm clone -f $cloneCommand
+        fi
+    else
+        yadm clone $cloneCommand
+    fi
     yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
 fi
 
@@ -86,8 +94,16 @@ fi
 nixos-generate-config || :
 
 read -p $'Tell me your secrets!\n' secrets < /dev/tty
+secCloneCommand = "--no-bootstrap $secrets"
 if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
-    yadm sec clone --no-bootstrap $secrets || :
+    if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
+        read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
+        if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
+            yadm sec clone -f $secCloneCommand
+        fi
+    else
+        yadm sec clone $secCloneCommand
+    fi
 
     # TODO: May need `yadm sec stash' here
     # yadm sec stash
