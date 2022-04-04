@@ -113,7 +113,7 @@ if [ "$secrets" != "n" ] || [ "$secrets" != "no" ]; then
         yadm sec clone $secCloneCommand
     fi
 
-    yadm sec gitconfg --unset core.worktree
+    yadm sec gitconfig --unset core.worktree
 
     # TODO: May need `yadm sec stash' here
     # yadm sec stash
