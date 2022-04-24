@@ -6,7 +6,7 @@
 :CUSTOM_ID:       b2bb02de-0ced-4df2-a6f5-2734845e163f
 :END:
 
-#+begin_src plaintext :tangle (meq/tangle-path)
+#+begin_src text :tangle (meq/tangle-path)
 syvl.org
 #+end_src
 
@@ -17,7 +17,7 @@ syvl.org
 :CUSTOM_ID:       697a3a77-89eb-4408-8cac-a5001e05daa2
 :END:
 
-#+begin_src text :tangle (meq/tangle-path) :shebang "#! /usr/bin/env nix-shell"
+#+begin_src text :tangle (meq/tangle-path) :shebang "#! /usr/bin/env nix-shell" :exports none
 <<0d6044e9-0d98-4d89-adcc-955ad42f0fee>>
 #+end_src
 
@@ -122,7 +122,7 @@ yadm git "make gnumake" fd emacs
 (with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 #+end_src
 
-#+begin_src plaintext :tangle (meq/tangle-path) :exports none
+#+begin_src text :tangle (meq/tangle-path) :exports none
 <<index.html>>
 #+end_src
 

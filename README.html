@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-04-24 Sun 02:48 -->
+<!-- 2022-04-24 Sun 02:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -56,7 +56,7 @@
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#orgc31267d">makefile</a></li>
+<li><a href="#orge0df3d0">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -74,77 +74,6 @@
 <div id="outline-container-697a3a77-89eb-4408-8cac-a5001e05daa2" class="outline-2">
 <h2 id="697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</h2>
 <div class="outline-text-2" id="text-697a3a77-89eb-4408-8cac-a5001e05daa2">
-<div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces">"
-#! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs
-#! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
-#! nix-shell -i hy
-"
-(import sys [argv])
-(del (get argv 0))
-
-(import bakery)
-(import bakery [make nixos-generate-config yadm zfs])
-(import click)
-(import os [path])
-(import pathlib [Path])
-(import stat)
-(import socket)
-
-(defn yes? [ var ] (in (.lower var) (, "y" "yes")))
-(defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
-(defn repo-exists [[secret False]]
-      (and (.exists Path (.join path home ".local" "share" (if secret "yadm-sec" "yadm") "repo.git"))
-	   (yes? (input (+ (if secret "Secrets r" "R") "epo already exists! Force clone?")))))
-(defn chmod-bootstrap [ bootstrap ] (.chmod bootstrap (| (| (| (.stat bootstrap) (.S_IEXEC stat)) (.S_IXGRP stat)) (.S_IXOTH stat))))
-#@((.command click)
-   (.option click "-b" "--bootstrap" :prompt True)
-   (.option click "-i" "--impermanent" :prompt True)
-   (.option click "-I" "--initialize-submodules" :prompt True)
-   (.option click "-s" "--secrets" :prompt True)
-   (.option click "-y" "--yadm-clone" :prompt True)
-   (.option click "-z" "--zfs-root" :prompt True)
-   (defn main [ impermanent yadm-clone secrets bootstrap zfs-root initialize-submodules ]
-	 (let [ home (.home Path)
-		impermanent (yes? impermanent)
-		worktree (if impermanent
-			    f"/persist/{home}"
-			    home)
-		yadm-clone (yes? yadm-clone)
-		zfs-root (yes? zfs-root)
-		secrets (no? secrets)
-		initialize-submodules (yes? initialize-submodules)
-		bootstrap (yes? bootstrap)
-		clone-opts { "w" worktree "no-bootstrap" True }
-		bootstrap-path (Path f"{home}/.config/yadm/bootstrap")
-		secret-bootstrap-path (Path f"{home}/.config/yadm-sec/bootstrap")
-		bootstrap-bin (bakery :program- bootstrap-path)
-		secret-bootstrap-bin (bakery :program- secret-bootstrap-path)
-		dataset f"{(.gethostname socket)}/shadowrylander" ]
-	      (if yadm-clone
-		  (do (.clone yadm :f (repo-exists) #** clone-opts "https://github.com/shadowrylander/shadowrylander.git")
-		      (.remote yadm :m/starter-args (, "set-url") :push True "origin" "git@github.com:shadowrylander/shadowrylander.git")))
-	      (nixos-generate-config :run True)
-	      (if secrets
-		  (do (.sec yadm :m/starter-args (, "clone") :f (repo-exists True) #** clone-opts secrets)
-		      (.sec yadm "gitconfig" "core.worktree" home)
-		      (chmod-bootstrap secret-bootstrap-path)
-		      (secret-bootstrap-bin worktree)))
-	      (if initialize-submodules
-		  (do (if impermanent
-			  (.gitconfig yadm "core.worktree" worktree))
-		      (.submodule (yadm :C worktree) :m/starter-args (, "update") :m/exports { "GIT_SSL_NO_VERIFY" 1 "GIT_DISCOVERY_ACROSS_FILESYSTEM" 1 } :init True :recursive True :remote True :force True)
-		      (.gitconfig yadm "core.worktree" home)
-		      (make :f f"{worktree}/.emacs.d/makefile" "soft-init")))
-	      (if bootstrap
-		  (do (chmod-bootstrap bootstrap-path)
-		      (bootstrap-bin worktree)))
-	      (if zfs-root
-		  (do (.set zfs :snapdir "visible" dataset :m/run True)
-		      (.inherit zfs :r True "snapdir" dataset :m/run True))))))
-</code></pre>
-</div>
-
 <div class="org-src-container">
 <pre><code class="language-hy match-braces rainbow-braces">"
 #! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs
@@ -242,12 +171,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org830fcab">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org707a78e">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orge164acc">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org65e671c">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -298,9 +227,9 @@ $bootstrap || echo "Sorry; something happened! Please try again!"
 </div>
 </div>
 
-<div id="outline-container-orgc31267d" class="outline-2">
-<h2 id="orgc31267d">makefile</h2>
-<div class="outline-text-2" id="text-orgc31267d">
+<div id="outline-container-orge0df3d0" class="outline-2">
+<h2 id="orge0df3d0">makefile</h2>
+<div class="outline-text-2" id="text-orge0df3d0">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -330,7 +259,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-04-24 Sun 02:48</p>
+<p class="date">Created: 2022-04-24 Sun 02:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
