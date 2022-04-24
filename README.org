@@ -10,11 +10,102 @@
 syvl.org
 #+end_src
 
+* index.hy
+:PROPERTIES:
+:header-args:hy+: :noweb-ref 0d6044e9-0d98-4d89-adcc-955ad42f0fee
+:ID:       697a3a77-89eb-4408-8cac-a5001e05daa2
+:CUSTOM_ID:       697a3a77-89eb-4408-8cac-a5001e05daa2
+:END:
+
+#+begin_src text :tangle (meq/tangle-path) :shebang "#! /usr/bin/env nix-shell"
+<<0d6044e9-0d98-4d89-adcc-955ad42f0fee>>
+#+end_src
+
+#+begin_src hy
+"
+#! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs
+#! nix-shell -I nixpkgs=https://github.com/<<username>>/nixpkgs/archive/j.tar.gz
+#! nix-shell -i hy
+"
+#+end_src
+
+#+begin_src hy
+(import sys [argv])
+(del (get argv 0))
+
+(import bakery)
+(import bakery [make nixos-generate-config yadm zfs])
+(import click)
+(import os [path])
+(import pathlib [Path])
+(import stat)
+(import socket)
+
+(defn yes? [ var ] (in (.lower var) (, "y" "yes")))
+(defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
+(defn repo-exists [[secret False]]
+      (and (.exists Path (.join path home ".local" "share" (if secret "yadm-sec" "yadm") "repo.git"))
+           (yes? (input (+ (if secret "Secrets r" "R") "epo already exists! Force clone?")))))
+#+end_src
+
+Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frederich's]] comment [[https://stackoverflow.com/questions/12791997/how-do-you-do-a-simple-chmod-x-from-within-python#comment26692909_12792002][here]]:
+
+#+begin_src hy
+(defn chmod-bootstrap [ bootstrap ] (.chmod bootstrap (| (| (| (.stat bootstrap) (.S_IEXEC stat)) (.S_IXGRP stat)) (.S_IXOTH stat))))
+#+end_src
+
+#+begin_src hy
+#@((.command click)
+   (.option click "-b" "--bootstrap" :prompt True)
+   (.option click "-i" "--impermanent" :prompt True)
+   (.option click "-I" "--initialize-submodules" :prompt True)
+   (.option click "-s" "--secrets" :prompt True)
+   (.option click "-y" "--yadm-clone" :prompt True)
+   (.option click "-z" "--zfs-root" :prompt True)
+   (defn main [ impermanent yadm-clone secrets bootstrap zfs-root initialize-submodules ]
+         (let [ home (.home Path)
+                impermanent (yes? impermanent)
+                worktree (if impermanent
+                            f"/persist/{home}"
+                            home)
+                yadm-clone (yes? yadm-clone)
+                zfs-root (yes? zfs-root)
+                secrets (no? secrets)
+                initialize-submodules (yes? initialize-submodules)
+                bootstrap (yes? bootstrap)
+                clone-opts { "w" worktree "no-bootstrap" True }
+                bootstrap-path (Path f"{home}/.config/yadm/bootstrap")
+                secret-bootstrap-path (Path f"{home}/.config/yadm-sec/bootstrap")
+                bootstrap-bin (bakery :program- bootstrap-path)
+                secret-bootstrap-bin (bakery :program- secret-bootstrap-path)
+                dataset f"{(.gethostname socket)}/<<username>>" ]
+              (if yadm-clone
+                  (do (.clone yadm :f (repo-exists) #** clone-opts "https://github.com/<<username>>/<<username>>.git")
+                      (.remote yadm :m/starter-args (, "set-url") :push True "origin" "git@github.com:<<username>>/<<username>>.git")))
+              (nixos-generate-config :run True)
+              (if secrets
+                  (do (.sec yadm :m/starter-args (, "clone") :f (repo-exists True) #** clone-opts secrets)
+                      (.sec yadm "gitconfig" "core.worktree" home)
+                      (chmod-bootstrap secret-bootstrap-path)
+                      (secret-bootstrap-bin worktree)))
+              (if initialize-submodules
+                  (do (if impermanent
+                          (.gitconfig yadm "core.worktree" worktree))
+                      (.submodule (yadm :C worktree) :m/starter-args (, "update") :m/exports { "GIT_SSL_NO_VERIFY" 1 "GIT_DISCOVERY_ACROSS_FILESYSTEM" 1 } :init True :recursive True :remote True :force True)
+                      (.gitconfig yadm "core.worktree" home)
+                      (make :f f"{worktree}/.emacs.d/makefile" "soft-init")))
+              (if bootstrap
+                  (do (chmod-bootstrap bootstrap-path)
+                      (bootstrap-bin worktree)))
+              (if zfs-root
+                  (do (.set zfs :snapdir "visible" dataset :m/run True)
+                      (.inherit zfs :r True "snapdir" dataset :m/run True))))))
+#+end_src
+
 * index.html
 :PROPERTIES:
 :header-args:shell+: :noweb-ref index.html
 :header-args:html+: :noweb-ref index.html
-:header-args:nix+: :noweb-ref index.html
 :ID:       f3e32608-7200-4808-9d42-59112f32d395
 :CUSTOM_ID:       f3e32608-7200-4808-9d42-59112f32d395
 :END:
@@ -38,7 +129,6 @@ yadm git "make gnumake" fd emacs
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-# This index file is also a shell script! Go to index.syvl.org to see what it can do!
 <<\EOF
 #+end_src
 
@@ -46,94 +136,28 @@ This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://
 <<4751ce0e-6018-4f00-8c6d-89f43c3fb792()>><!--
 #+end_src
 
+For information on how to prompt when piping to ~sh~, see [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
+and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]].
+
 #+begin_src shell
 EOF
-#+end_src
-
-#+begin_src shell
-setFail () { set -eo pipefail; }
-ensure () {
-    hash "$1" 2> /dev/null
-    if [ $? -ne 0 ]; then
-        hash nix 2> /dev/null
-        [ $? -ne 0 ] && sh <(curl -fsSL https://nixos.org/nix/install) --daemon
-        [ -z "$2" ] && nix-env -i "$1" || nix-env -i "$2"
-    fi
-}
-remove () { [ -z "$2" ] && nix-env -e "$1" || nix-env -e "$2"; }
-
-for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do ensure $p; done
-
-setFail
+set -eo pipefail
+bootstrap="$HOME/.local/share/syvl-bootstrap"
 #+end_src
 
 Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
 and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]]:
 
 #+begin_src shell
-read -p $'Impermanent?\n' impermanent < /dev/tty
-if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
-    worktree="/persist/$HOME"
-else
-    worktree="$HOME"
+read -p $'Curl index script?\n' cis < /dev/tty
+if [ "$cis" == "y" ] || [ "$cis" == "yes" ]; then
+    curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
 #+end_src
 
 #+begin_src shell
-read -p $'Yadm clone?\n' yc < /dev/tty
-cloneCommand="-w $worktree --no-bootstrap https://github.com/<<username>>/<<username>>.git"
-if [ "$yc" == "y" ] || [ "$yc" == "yes" ]; then
-    if [ -d "$HOME/.local/share/yadm/repo.git" ]; then
-        read -p $'Repo already exists! Force clone?\n' fc < /dev/tty
-        if [ "$fc" == "y" ] || [ "$fc" == "yes" ]; then
-            yadm clone -f $cloneCommand
-        fi
-    else
-        yadm clone $cloneCommand
-    fi
-
-    yadm remote set-url --push origin git@github.com:<<username>>/<<username>>.git
-    yadm stash
-fi
-
-nixos-generate-config || :
-
-read -p $'Tell me your secrets!\n' secrets < /dev/tty
-secCloneCommand="-w $worktree --no-bootstrap $secrets"
-if [ "$secrets" != "n" ] && [ "$secrets" != "no" ]; then
-    if [ -d "$HOME/.local/share/yadm-sec/repo.git" ]; then
-        read -p $'Secrets repo already exists! Force clone secrets?\n' forceSecrets < /dev/tty
-        if [ "$forceSecrets" == "y" ] || [ "$forceSecrets" == "yes" ]; then
-            yadm sec clone -f $secCloneCommand
-        fi
-    else
-        yadm sec clone $secCloneCommand
-    fi
-
-    yadm sec gitconfig core.worktree $HOME
-    yadm sec stash
-
-    chmod +x "$HOME/.config/yadm-sec/bootstrap"
-    "$HOME/.config/yadm-sec/bootstrap"
-fi
-
-read -p $'Initialize Yadm Submodules?\n' ys < /dev/tty
-if [ "$ys" == "y" ] || [ "$ys" == "yes" ]; then
-    if [ "$impermanent" == "y" ] || [ "$impermanent" == "yes" ]; then
-        yadm gitconfig core.worktree $worktree
-    fi
-    GIT_SSL_NO_VERIFY=1 GIT_DISCOVERY_ACROSS_FILESYSTEM=1 yadm -C $worktree submodule update --init --depth 1 --recursive --remote --force
-    yadm gitconfig core.worktree $HOME
-    make -f "$worktree/.emacs.d/makefile" soft-init
-fi
-
-read -p $'Bootstrap?\n' bootstrap < /dev/tty
-if [ "$bootstrap" == "y" ] | [ "$bootstrap" == "yes" ]; then
-    chmod +x "$HOME/.config/yadm/bootstrap"
-    "$HOME/.config/yadm/bootstrap"
-fi
-
-# for p in <<58b62ef7-d880-4cc4-9d4d-9d0e76983d2f>>; do remove $p; done
+chmod +x $bootstrap
+$bootstrap || echo "Sorry; something happened! Please try again!"
 #+end_src
 
 * makefile
