@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 "
-#! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs gnupg2 pinentry transcrypt
+#! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs gnupg2 pinentry git-crypt
 #! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 #! nix-shell -i hy
 "
