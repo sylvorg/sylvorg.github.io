@@ -6,9 +6,9 @@ mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
 
 et:
-|chmod +x $(mkfileDir)/settings/*.sh
-|$(mkfileDir)/settings/org-export.sh $(mkfileDir)/README.org
-|$(mkfileDir)/settings/org-tangle.sh $(mkfileDir)/README.org
+|chmod +x $(mkfileDir)/settings/bin/*
+|$(mkfileDir)/settings/bin/org-export $(mkfileDir)/README.org
+|$(mkfileDir)/settings/bin/org-tangle $(mkfileDir)/README.org
 
 commit:
 |git -C $(mkfileDir) commit --allow-empty-message -am ""

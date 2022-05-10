@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-05-04 Wed 04:18 -->
+<!-- 2022-05-10 Tue 06:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -56,7 +56,7 @@
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#org11945e1">makefile</a></li>
+<li><a href="#orgac845eb">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -75,11 +75,11 @@
 <h2 id="697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</h2>
 <div class="outline-text-2" id="text-697a3a77-89eb-4408-8cac-a5001e05daa2">
 <div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">"
+<pre><code class="language-hy match-braces rainbow-braces">#[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
 #! nix-shell -p python310 python310Packages.bakery yadm git gnumake fd emacs gnupg2 pinentry git-crypt
 #! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 #! nix-shell -i hy
-"
+]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 </code></pre>
 </div>
 
@@ -88,18 +88,19 @@
 (del (get argv 0))
 
 (import bakery)
-(import bakery [echo gpg make nixos-generate-config yadm zfs])
+(import bakery [chown echo gpg git make nixos-generate-config yadm zfs])
 (import click)
-(import os [path] [chmod])
+(import os [path listdir chmod getlogin expanduser symlink])
 (import pathlib [Path])
 (import stat)
 (import socket)
 
 (defn yes? [ var ] (in (.lower var) (, "y" "yes")))
 (defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
-(defn repo-exists []
-      (and (.exists Path (.join path home ".local" "share" "yadm" "repo.git"))
-	   (yes? (input "Repo already exists! Force clone?"))))
+(defn iyes? [ query ] (yes? (input query)))
+(defn repo-exists [ yadm-repo ]
+      (and (.exists Path yadm-repo)
+	   (iyes? "Repo already exists! Force clone?"))))
 </code></pre>
 </div>
 
@@ -120,8 +121,14 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
    (.option click "-Y" "--import-yubikey" :prompt True)
    (.option click "-y" "--yadm-clone" :prompt True)
    (.option click "-z" "--zfs-root" :prompt True)
-   (defn main [ impermanent import-yubikey yadm-clone secrets bootstrap zfs-root initialize-submodules ]
-	 (let [ home (.home Path)
+   (.option click "-p" "--primary-user" :prompt True)
+   (.option click "-u" "--user-repo" :prompt True)
+   (defn main [ impermanent import-yubikey git-clone yadm-clone secrets bootstrap zfs-root initialize-submodules primary-user user-repo ]
+	 (let [ current-user (getlogin)
+		home (.home Path)
+		username "shadowrylander"
+		primary-user (if (yes? primary-user) username (if (iyes? "Is the current user the primary user?") current-user primary-user))
+		primary-home (expanduser f"~{primary-user}")
 		impermanent (yes? impermanent)
 		worktree (if impermanent
 			    f"/persist/{home}"
@@ -132,22 +139,46 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
 		initialize-submodules (yes? initialize-submodules)
 		bootstrap (yes? bootstrap)
 		clone-opts { "w" worktree "no-bootstrap" True }
+		submodule-opts { "m/starter-args" (, "update")
+				 "m/exports" { "GIT_DISCOVERY_ACROSS_FILESYSTEM" 1 }
+				 "init" True
+				 "recursive" True
+				 "remote" True
+				 "force" True }
 		bootstrap-path (Path f"{home}/.config/yadm/bootstrap")
 		bootstrap-bin (bakery :program- bootstrap-path)
-		dataset f"{(.gethostname socket)}/shadowrylander" ]
+		reponame "aiern"
+		user-repo (if (yes? user-repo) f"{home}/{reponame}" user-repo)
+		primary-repo f"{primary-home}/{reponame}"
+		yadm-repo f"{home}/.local/share/yadm/repo.git"
+		dataset f"{(.gethostname socket)}/{primary-user}" ]
 	      (if import-yubikey
 		  (do (gpg :fetch True)
 		      (gpg :card-status True)
 		      (| (echo (+ (.join "" (.split (get (gpg :fingerprint True "jeet.ray@syvl.org" :m/list True) 1))) ":6:")) (gpg :import-ownertrust))))
+	      (if (not (or (.exists path user-repo) (len (listdir user-repo))))
+		  (do (if (not (or zfs-root (iyes? "Are you using a shared dataset for your central repo, such as `bcachefs' or `btrfs'?")))
+			  (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
+			      (if (not (and (= current-user primary-user) (.exists path user-repo)))
+				  (symlink primary-repo user-repo))))
+		      (.clone git f"https://github.com/{username}/{username}.git" user-repo)
+		      (.remote (git :C user-repo) :m/starter-args (, "set-url") :push True "origin" f"git@github.com:{username}/{username}.git")
+
+		      ;; If I unlock before I update the submodules, I can use `ssh://' urls immediately
+		      (.crypt (git :C user-repo) "unlock")
+		      (.submodule (git :C user-repo) #** submodule-opts)
+
+		      (chown :R True f"{primary-user}:{primary-user}" user-repo)))
 	      (if yadm-clone
-		  (do (.clone yadm :f (repo-exists) #** clone-opts "https://github.com/shadowrylander/shadowrylander.git")
-		      (.remote yadm :m/starter-args (, "set-url") :push True "origin" "git@github.com:shadowrylander/shadowrylander.git")
-		      (.crypt yadm unlock)))
+		  (do (.clone yadm :f (repo-exists home) #** clone-opts user-repo)
+		      (.remote (git :C user-repo) :m/starter-args (, "add") current-user yadm-repo)
+		      (.crypt yadm unlock)
+		      (.submodule yadm #** submodule-opts)))
 	      (nixos-generate-config :run True)
 	      (if initialize-submodules
 		  (do (if impermanent
 			  (.gitconfig yadm "core.worktree" worktree))
-		      (.submodule (yadm :C worktree) :m/starter-args (, "update") :m/exports { "GIT_SSL_NO_VERIFY" 1 "GIT_DISCOVERY_ACROSS_FILESYSTEM" 1 } :init True :recursive True :remote True :force True)
+		      (.submodule (yadm :C worktree) #** submodule-opts)
 		      (.gitconfig yadm "core.worktree" home)
 		      (make :f f"{worktree}/.emacs.d/makefile" "soft-init")))
 	      (if bootstrap
@@ -169,12 +200,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org22eba0d">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org7969285">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org1e5446e">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org5b935ad">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -225,9 +256,9 @@ $bootstrap || echo "Sorry; something happened! Please try again!"
 </div>
 </div>
 
-<div id="outline-container-org11945e1" class="outline-2">
-<h2 id="org11945e1">makefile</h2>
-<div class="outline-text-2" id="text-org11945e1">
+<div id="outline-container-orgac845eb" class="outline-2">
+<h2 id="orgac845eb">makefile</h2>
+<div class="outline-text-2" id="text-orgac845eb">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -237,9 +268,9 @@ mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfileDir := $(dir $(mkfilePath))
 
 et:
-|chmod +x $(mkfileDir)/settings/*.sh
-|$(mkfileDir)/settings/org-export.sh $(mkfileDir)/README.org
-|$(mkfileDir)/settings/org-tangle.sh $(mkfileDir)/README.org
+|chmod +x $(mkfileDir)/settings/bin/*
+|$(mkfileDir)/settings/bin/org-export $(mkfileDir)/README.org
+|$(mkfileDir)/settings/bin/org-tangle $(mkfileDir)/README.org
 
 commit:
 |git -C $(mkfileDir) commit --allow-empty-message -am ""
@@ -257,7 +288,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-05-04 Wed 04:18</p>
+<p class="date">Created: 2022-05-10 Tue 06:41</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
