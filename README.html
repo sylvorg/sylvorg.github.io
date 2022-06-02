@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-01 Wed 15:52 -->
+<!-- 2022-06-02 Thu 20:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -56,7 +56,7 @@
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a></li>
-<li><a href="#orge7d3a31">makefile</a></li>
+<li><a href="#orgd4667c1">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -103,7 +103,7 @@
 (defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
 (defn ino? [ query ] (no? (input query)))
 (defn repo-exists [ yadm-repo ]
-      (and (.exists Path yadm-repo)
+      (and (.exists path yadm-repo)
            (iyes? "Repo already exists! Force clone?"))))
 </code></pre>
 </div>
@@ -190,29 +190,30 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                       (.crypt (git :C user-repo) "unlock")
                       (.submodule (git :C user-repo) :m/regular-args (, ".password-store") #** submodule-opts)
 
-                      (if (or (in "tailscale0:" (ifconfig :m/split True))
-                              (in "tun0:" (ifconfig :m/split True)))
-                          (if (!= (uname :o True :m/str True) "Android")
-                              (if impermanent
-                                  (.up tailscale :hostname (uuid5 (uuid4) (str (uuid4)))
-                                                 :authkey (.create (tailapi :domain tailscale-domain
-                                                                            :recreate-response True
-                                                                            :api-key (or tailscale-api-key
-                                                                                         (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                            :ephemeral True
-                                                                            :just-key True
-                                                                            "bootstrap"))
-                                  (.up tailscale :hostname hostname
-                                                 :authkey (.create (tailapi :domain tailscale-domain
-                                                                            :recreate-response True
-                                                                            :api-key (or tailscale-api-key
-                                                                                         (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                            :ephemeral (iyes? "Set the ephemeral property for this tailscale authkey: ")
-                                                                            :preauthorized (iyes? "Set the pre-authorized property for this tailscale authkey: ")
-                                                                            :reusable (iyes? "Set the reusable property for this tailscale authkey: ")
-                                                                            :just-key True
-                                                                            (input "Tags to set for this authkey, as a string of tags separated by spaces: ")))))
-                          (raise (ValueError "Sorry; enable the tailscale daemon to continue!")))
+                      (if (!= (uname :o True :m/str True) "Android")
+                          (if (.exists path "/var/lib/tailscale/tailscaled.state")
+                              (if (not (or (in "tailscale0:" (ifconfig :m/split True))
+                                           (in "tun0:" (ifconfig :m/split True))))
+                                  (if impermanent
+                                      (.up tailscale :hostname (uuid5 (uuid4) (str (uuid4)))
+                                                     :authkey (.create (tailapi :domain tailscale-domain
+                                                                                :recreate-response True
+                                                                                :api-key (or tailscale-api-key
+                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
+                                                                                :ephemeral True
+                                                                                :just-key True
+                                                                                "bootstrap"))
+                                      (.up tailscale :hostname hostname
+                                                     :authkey (.create (tailapi :domain tailscale-domain
+                                                                                :recreate-response True
+                                                                                :api-key (or tailscale-api-key
+                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
+                                                                                :ephemeral (iyes? "Set the ephemeral property for this tailscale authkey: ")
+                                                                                :preauthorized (iyes? "Set the pre-authorized property for this tailscale authkey: ")
+                                                                                :reusable (iyes? "Set the reusable property for this tailscale authkey: ")
+                                                                                :just-key True
+                                                                                (input "Tags to set for this authkey, as a string of tags separated by spaces: ")))))
+                              (raise (ValueError "Sorry; enable the tailscale daemon to continue!"))))
 
                       (if initialize-primary-submodules
                           (do (.submodule (git :C user-repo) #** submodule-opts)
@@ -251,12 +252,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="orgf775223">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="orgf44a85c">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orga71a78c">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org57eaeb2">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -342,9 +343,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-orge7d3a31" class="outline-2">
-<h2 id="orge7d3a31">makefile</h2>
-<div class="outline-text-2" id="text-orge7d3a31">
+<div id="outline-container-orgd4667c1" class="outline-2">
+<h2 id="orgd4667c1">makefile</h2>
+<div class="outline-text-2" id="text-orgd4667c1">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -374,7 +375,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-01 Wed 15:52</p>
+<p class="date">Created: 2022-06-02 Thu 20:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -23,7 +23,7 @@
 (defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
 (defn ino? [ query ] (no? (input query)))
 (defn repo-exists [ yadm-repo ]
-      (and (.exists Path yadm-repo)
+      (and (.exists path yadm-repo)
            (iyes? "Repo already exists! Force clone?"))))
 (defn chmod-bootstrap [ bootstrap ] (.chmod bootstrap (| (| (| (.stat bootstrap) (.S_IEXEC stat)) (.S_IXGRP stat)) (.S_IXOTH stat))))
 #@((.command click)
@@ -98,29 +98,30 @@
                       (.crypt (git :C user-repo) "unlock")
                       (.submodule (git :C user-repo) :m/regular-args (, ".password-store") #** submodule-opts)
 
-                      (if (or (in "tailscale0:" (ifconfig :m/split True))
-                              (in "tun0:" (ifconfig :m/split True)))
-                          (if (!= (uname :o True :m/str True) "Android")
-                              (if impermanent
-                                  (.up tailscale :hostname (uuid5 (uuid4) (str (uuid4)))
-                                                 :authkey (.create (tailapi :domain tailscale-domain
-                                                                            :recreate-response True
-                                                                            :api-key (or tailscale-api-key
-                                                                                         (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                            :ephemeral True
-                                                                            :just-key True
-                                                                            "bootstrap"))
-                                  (.up tailscale :hostname hostname
-                                                 :authkey (.create (tailapi :domain tailscale-domain
-                                                                            :recreate-response True
-                                                                            :api-key (or tailscale-api-key
-                                                                                         (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                            :ephemeral (iyes? "Set the ephemeral property for this tailscale authkey: ")
-                                                                            :preauthorized (iyes? "Set the pre-authorized property for this tailscale authkey: ")
-                                                                            :reusable (iyes? "Set the reusable property for this tailscale authkey: ")
-                                                                            :just-key True
-                                                                            (input "Tags to set for this authkey, as a string of tags separated by spaces: ")))))
-                          (raise (ValueError "Sorry; enable the tailscale daemon to continue!")))
+                      (if (!= (uname :o True :m/str True) "Android")
+                          (if (.exists path "/var/lib/tailscale/tailscaled.state")
+                              (if (not (or (in "tailscale0:" (ifconfig :m/split True))
+                                           (in "tun0:" (ifconfig :m/split True))))
+                                  (if impermanent
+                                      (.up tailscale :hostname (uuid5 (uuid4) (str (uuid4)))
+                                                     :authkey (.create (tailapi :domain tailscale-domain
+                                                                                :recreate-response True
+                                                                                :api-key (or tailscale-api-key
+                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
+                                                                                :ephemeral True
+                                                                                :just-key True
+                                                                                "bootstrap"))
+                                      (.up tailscale :hostname hostname
+                                                     :authkey (.create (tailapi :domain tailscale-domain
+                                                                                :recreate-response True
+                                                                                :api-key (or tailscale-api-key
+                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
+                                                                                :ephemeral (iyes? "Set the ephemeral property for this tailscale authkey: ")
+                                                                                :preauthorized (iyes? "Set the pre-authorized property for this tailscale authkey: ")
+                                                                                :reusable (iyes? "Set the reusable property for this tailscale authkey: ")
+                                                                                :just-key True
+                                                                                (input "Tags to set for this authkey, as a string of tags separated by spaces: ")))))
+                              (raise (ValueError "Sorry; enable the tailscale daemon to continue!"))))
 
                       (if initialize-primary-submodules
                           (do (.submodule (git :C user-repo) #** submodule-opts)
