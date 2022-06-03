@@ -210,7 +210,7 @@ yadm git "make gnumake" fd emacs
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-<<\EOF # This is also a bootstrapping script! Check out <a href="index.hy.syvl.org">the `hy' script</a> and <a href="index.sh.syvl.org">the `shell' script</a> for more information.
+<<\EOF # This is also a bootstrapping script! Check out <a href="https://index.hy.syvl.org">the `hy' script</a> and <a href="https://index.sh.syvl.org">the `shell' script</a> for more information.
 #+end_src
 
 #+begin_src html
