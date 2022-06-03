@@ -233,6 +233,7 @@ and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] a
 
 #+begin_src shell
 set -eo pipefail
+mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
 #+end_src
 

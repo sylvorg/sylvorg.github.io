@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-03 Fri 23:10 -->
+<!-- 2022-06-03 Fri 23:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -60,7 +60,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org710d251">makefile</a></li>
+<li><a href="#org6a61ecc">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -256,12 +256,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="orge4f9bcc">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org9712241">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orgb5da4b4">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org15e1c3e">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -296,6 +296,7 @@ and <a href="https://stackoverflow.com/users/2092245/ferhtgoldaraz">ferhtgoldara
 
 <div class="org-src-container">
 <pre><code class="language-sh match-braces rainbow-braces">set -eo pipefail
+mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
 </code></pre>
 </div>
@@ -368,9 +369,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org710d251" class="outline-2">
-<h2 id="org710d251">makefile</h2>
-<div class="outline-text-2" id="text-org710d251">
+<div id="outline-container-org6a61ecc" class="outline-2">
+<h2 id="org6a61ecc">makefile</h2>
+<div class="outline-text-2" id="text-org6a61ecc">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -400,7 +401,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-03 Fri 23:10</p>
+<p class="date">Created: 2022-06-03 Fri 23:13</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
