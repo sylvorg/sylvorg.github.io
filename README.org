@@ -210,18 +210,27 @@ yadm git "make gnumake" fd emacs
 This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://raw.githubusercontent.com/ellipsis/ellipsis/gh-pages/index.html][here]]:
 
 #+begin_src shell
-<<\EOF
+<<\EOF # This is also a bootstrapping script! Check out <a href="index.hy.syvl.org">the `hy' script</a> and <a href="index.sh.syvl.org">the `shell' script</a> for more information.
 #+end_src
 
 #+begin_src html
-<<4751ce0e-6018-4f00-8c6d-89f43c3fb792()>><!--
+<<4751ce0e-6018-4f00-8c6d-89f43c3fb792()>><!-- This is where the site html goes.
 #+end_src
+
+#+begin_src shell
+EOF # This is where the site html ends.
+#+end_src
+
+** index.sh
+:PROPERTIES:
+:ID:       cca54aae-22bc-4c33-899f-67fa8ec2eb8e
+:CUSTOM_ID:       cca54aae-22bc-4c33-899f-67fa8ec2eb8e
+:END:
 
 For information on how to prompt when piping to ~sh~, see [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
 and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]].
 
 #+begin_src shell
-EOF
 set -eo pipefail
 bootstrap="$HOME/.local/share/syvl-bootstrap"
 #+end_src
