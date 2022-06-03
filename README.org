@@ -218,7 +218,8 @@ This was adapted from [[https://ellipsis.sh/][ellipsis.sh]], raw file [[https://
 #+end_src
 
 #+begin_src shell
-EOF # This is where the site html ends.
+EOF
+# This is where the site html ends.
 #+end_src
 
 ** index.sh
