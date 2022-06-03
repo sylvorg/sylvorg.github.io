@@ -233,21 +233,28 @@ and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] a
 
 #+begin_src shell
 set -eo pipefail
-bootstrap="$HOME/.local/share/syvl-bootstrap"
+bootstrap="$HOME/.local/share/syvl/bootstrap"
 #+end_src
 
 Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
 and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] answer [[https://stackoverflow.com/a/15696250/10827766][here]]:
 
 #+begin_src shell
-read -p $'Curl index script?\n' curlIndexScript < /dev/tty
+if [ -f "$bootstrap" ]; then
+    read -p $'Curl hylang index script?\n' curlIndexScript < /dev/tty
+else
+    curlIndexScript="yes"
+fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
 #+end_src
 
 #+begin_src shell
+chmod +x $bootstrap
 if hash nix 2> /dev/null; then
+    $bootstrap $@ || echo "Sorry; something happened! Please try again!"
+else
     read -p $'Install nix?\n' installNix < /dev/tty
     if [ "$installNix" == "y" ] || [ "$installNix" == "yes" ]; then
         read -p $'Install nix as multi-user?\n' installMulti < /dev/tty
@@ -257,32 +264,36 @@ if hash nix 2> /dev/null; then
             sh <(curl -fsSL https://nixos.org/nix/install) --no-daemon
         fi
     fi
-    chmod +x $bootstrap
-    $bootstrap $@ || echo "Sorry; something happened! Please try again!"
-else
-    pacapt="$HOME/.local/share/syvl-pacapt"
-    read -p $'Curl pacapt?\n' curlPacapt < /dev/tty
-    if [ "$curlPacapt" == "y" ] || [ "$curlPacapt" == "yes" ]; then
-        if [ "$(uname -o)" == "Android" ]; then
-            pkg install curl
-            ln -s /data/data/com.termux/files/usr/lib/libssl.so /data/data/com.termux/files/usr/lib/libssl.so.1.1 || :
-            ln -s /data/data/com.termux/files/usr/lib/libcrypto.so /data/data/com.termux/files/usr/lib/libcrypto.so.1.1 || :
-            apt update
-            apt upgrade
+    set +eo pipefail
+    if ! $bootstrap $@; then
+        set -eo pipefail
+        read -p $'Nix-shell bootstrap failed; try again after installing dependencies?\n' installDeps < /dev/tty
+        if [ "$installDeps" == "y" ] || [ "$installDeps" == "yes" ]; then
+            pacapt="$HOME/.local/share/syvl/pacapt"
+            read -p $'Curl pacapt?\n' curlPacapt < /dev/tty
+            if [ "$curlPacapt" == "y" ] || [ "$curlPacapt" == "yes" ]; then
+                if [ "$(uname -o)" == "Android" ]; then
+                    pkg install curl
+                    ln -s /data/data/com.termux/files/usr/lib/libssl.so /data/data/com.termux/files/usr/lib/libssl.so.1.1 || :
+                    ln -s /data/data/com.termux/files/usr/lib/libcrypto.so /data/data/com.termux/files/usr/lib/libcrypto.so.1.1 || :
+                    apt update
+                    apt upgrade
+                fi
+                curl -fsSLo $pacapt https://raw.githubusercontent.com/icy/pacapt/ng/pacapt
+            fi
+            read -p $'Install dependencies?\n' setupDependencies < /dev/tty
+            if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
+                chmod +x $pacapt
+                $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
+                pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz requests
+                tailapiGit="$HOME/.local/share/tailapi.git"
+                git clone https://github.com/syvlorg/tailapi.git $tailapiGit || git -C $tailapiGit pull origin main
+                chmod +x $tailapiGit/tailapi.py
+                ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
+            fi
+            hy $bootstrap $@ || echo "Sorry; something happened! Please try again!"
         fi
-        curl -fsSLo $pacapt https://raw.githubusercontent.com/icy/pacapt/ng/pacapt
     fi
-    read -p $'Install dependencies?\n' setupDependencies < /dev/tty
-    if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
-        chmod +x $pacapt
-        $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
-        pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz requests
-        tailapiGit="$HOME/.local/share/tailapi.git"
-        git clone https://github.com/syvlorg/tailapi.git $tailapiGit || git -C $tailapiGit pull origin main
-        chmod +x $tailapiGit/tailapi.py
-        ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
-    fi
-    hy $bootstrap $@ || echo "Sorry; something happened! Please try again!"
 fi
 #+end_src
 
