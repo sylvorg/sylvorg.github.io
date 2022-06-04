@@ -253,7 +253,7 @@ fi
 #+begin_src shell
 chmod +x $bootstrap
 if hash nix 2> /dev/null; then
-    $bootstrap $@ || echo "Sorry; something happened! Please try again!"
+    $bootstrap $@
 else
     read -p $'Install nix?\n' installNix < /dev/tty
     if [ "$installNix" == "y" ] || [ "$installNix" == "yes" ]; then
@@ -291,7 +291,7 @@ else
                 chmod +x $tailapiGit/tailapi.py
                 ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
             fi
-            hy $bootstrap $@ || echo "Sorry; something happened! Please try again!"
+            hy $bootstrap $@
         fi
     fi
 fi
