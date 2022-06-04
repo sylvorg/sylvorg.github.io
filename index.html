@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-03 Fri 23:13 -->
+<!-- 2022-06-04 Sat 04:01 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -61,7 +61,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org6a61ecc">makefile</a></li>
+<li><a href="#org664209b">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -81,7 +81,7 @@
 <div class="outline-text-2" id="text-697a3a77-89eb-4408-8cac-a5001e05daa2">
 <div class="org-src-container">
 <pre><code class="language-hy match-braces rainbow-braces">#[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg2 git-crypt tailscale tailapi pass
+#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass
 #! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
@@ -257,12 +257,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org9712241">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org4802a43">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org15e1c3e">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orgddfcaa0">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -370,9 +370,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org6a61ecc" class="outline-2">
-<h2 id="org6a61ecc">makefile</h2>
-<div class="outline-text-2" id="text-org6a61ecc">
+<div id="outline-container-org664209b" class="outline-2">
+<h2 id="org664209b">makefile</h2>
+<div class="outline-text-2" id="text-org664209b">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -402,7 +402,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-03 Fri 23:13</p>
+<p class="date">Created: 2022-06-04 Sat 04:01</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

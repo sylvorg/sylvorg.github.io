@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg2 git-crypt tailscale tailapi pass
+#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass
 #! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
