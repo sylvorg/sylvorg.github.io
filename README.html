@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-04 Sat 04:21 -->
+<!-- 2022-06-04 Sat 05:38 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -60,7 +60,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org5bb0ad6">makefile</a></li>
+<li><a href="#org6511a46">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -94,7 +94,7 @@
 (import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
 (import click)
-(import os [path listdir chmod getlogin expanduser symlink])
+(import os [path listdir chmod getlogin symlink])
 (import pathlib [Path])
 (import stat)
 (import socket)
@@ -141,7 +141,7 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                 home (.home Path)
                 username "shadowrylander"
                 primary-user (if (yes? primary-user) username (if (iyes? "Current user the primary user: ") current-user primary-user))
-                primary-home (expanduser f"~{primary-user}")
+                primary-home (.expanduser path f"~{primary-user}")
                 impermanent (yes? impermanent)
                 worktree (if impermanent
                             f"/persist/{home}"
@@ -256,12 +256,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org854dc50">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org1ba4f06">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orga5a6d8d">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org05ad2f0">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -369,9 +369,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org5bb0ad6" class="outline-2">
-<h2 id="org5bb0ad6">makefile</h2>
-<div class="outline-text-2" id="text-org5bb0ad6">
+<div id="outline-container-org6511a46" class="outline-2">
+<h2 id="org6511a46">makefile</h2>
+<div class="outline-text-2" id="text-org6511a46">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -401,7 +401,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-04 Sat 04:21</p>
+<p class="date">Created: 2022-06-04 Sat 05:38</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

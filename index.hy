@@ -10,7 +10,7 @@
 (import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
 (import click)
-(import os [path listdir chmod getlogin expanduser symlink])
+(import os [path listdir chmod getlogin symlink])
 (import pathlib [Path])
 (import stat)
 (import socket)
@@ -45,7 +45,7 @@
                 home (.home Path)
                 username "shadowrylander"
                 primary-user (if (yes? primary-user) username (if (iyes? "Current user the primary user: ") current-user primary-user))
-                primary-home (expanduser f"~{primary-user}")
+                primary-home (.expanduser path f"~{primary-user}")
                 impermanent (yes? impermanent)
                 worktree (if impermanent
                             f"/persist/{home}"
