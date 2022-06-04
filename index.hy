@@ -44,7 +44,7 @@
          (let [ current-user (getlogin)
                 home (.home Path)
                 username "shadowrylander"
-                primary-user (if (yes? primary-user) username (if (iyes? "Is the current user the primary user?") current-user primary-user))
+                primary-user (if (yes? primary-user) username (if (iyes? "Current user the primary user: ") current-user primary-user))
                 primary-home (expanduser f"~{primary-user}")
                 impermanent (yes? impermanent)
                 worktree (if impermanent
@@ -82,12 +82,12 @@
               (if import-yubikey
                   (do (gpg :fetch True)
                       (gpg :card-status True))
-                  (if (setx gpg-key (ino? "Path to gpg private key?"))
+                  (if (setx gpg-key (ino? "Path to gpg private key: "))
                       (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
               (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
-                  (do (if (not (or zfs-root (iyes? "Are you using a shared dataset for your central repo, such as via `bcachefs' or `btrfs'? ")))
+                  (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
                               (if (not (and (= current-user primary-user) (.exists path user-repo)))
                                   (symlink primary-repo user-repo))))

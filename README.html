@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-04 Sat 04:16 -->
+<!-- 2022-06-04 Sat 04:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -60,7 +60,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#orgb50b1f2">makefile</a></li>
+<li><a href="#org5bb0ad6">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -140,7 +140,7 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
          (let [ current-user (getlogin)
                 home (.home Path)
                 username "shadowrylander"
-                primary-user (if (yes? primary-user) username (if (iyes? "Is the current user the primary user?") current-user primary-user))
+                primary-user (if (yes? primary-user) username (if (iyes? "Current user the primary user: ") current-user primary-user))
                 primary-home (expanduser f"~{primary-user}")
                 impermanent (yes? impermanent)
                 worktree (if impermanent
@@ -178,12 +178,12 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
               (if import-yubikey
                   (do (gpg :fetch True)
                       (gpg :card-status True))
-                  (if (setx gpg-key (ino? "Path to gpg private key?"))
+                  (if (setx gpg-key (ino? "Path to gpg private key: "))
                       (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
               (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
-                  (do (if (not (or zfs-root (iyes? "Are you using a shared dataset for your central repo, such as via `bcachefs' or `btrfs'? ")))
+                  (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
                               (if (not (and (= current-user primary-user) (.exists path user-repo)))
                                   (symlink primary-repo user-repo))))
@@ -256,12 +256,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org195666c">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org854dc50">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org81614c7">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orga5a6d8d">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -308,7 +308,7 @@ and <a href="https://stackoverflow.com/users/2092245/ferhtgoldaraz">ferhtgoldara
 
 <div class="org-src-container">
 <pre><code class="language-sh match-braces rainbow-braces">if [ -f "$bootstrap" ]; then
-    read -p $'Curl hylang index script?\n' curlIndexScript &lt; /dev/tty
+    read -p $'Curl hylang index script: ' curlIndexScript &lt; /dev/tty
 else
     curlIndexScript="yes"
 fi
@@ -369,9 +369,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-orgb50b1f2" class="outline-2">
-<h2 id="orgb50b1f2">makefile</h2>
-<div class="outline-text-2" id="text-orgb50b1f2">
+<div id="outline-container-org5bb0ad6" class="outline-2">
+<h2 id="org5bb0ad6">makefile</h2>
+<div class="outline-text-2" id="text-org5bb0ad6">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -401,7 +401,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-04 Sat 04:16</p>
+<p class="date">Created: 2022-06-04 Sat 04:21</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
