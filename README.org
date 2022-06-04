@@ -50,7 +50,7 @@ syvl.org
 (defn ino? [ query ] (no? (input query)))
 (defn repo-exists [ yadm-repo ]
       (and (.exists path yadm-repo)
-           (iyes? "Repo already exists! Force clone?"))))
+           (iyes? "Repo already exists! Force clone?")))
 #+end_src
 
 Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frederich's]] comment [[https://stackoverflow.com/questions/12791997/how-do-you-do-a-simple-chmod-x-from-within-python#comment26692909_12792002][here]]:

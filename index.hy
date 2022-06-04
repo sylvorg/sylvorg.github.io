@@ -24,7 +24,7 @@
 (defn ino? [ query ] (no? (input query)))
 (defn repo-exists [ yadm-repo ]
       (and (.exists path yadm-repo)
-           (iyes? "Repo already exists! Force clone?"))))
+           (iyes? "Repo already exists! Force clone?")))
 (defn chmod-bootstrap [ bootstrap ] (.chmod bootstrap (| (| (| (.stat bootstrap) (.S_IEXEC stat)) (.S_IXGRP stat)) (.S_IXOTH stat))))
 #@((.command click)
    (.option click "-b" "--bootstrap" :prompt "Run yadm bootstrap")
