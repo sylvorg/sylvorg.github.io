@@ -85,7 +85,7 @@
                   (if (setx gpg-key (ino? "Path to gpg private key?"))
                       (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
-              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust))
+              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
                   (do (if (not (or zfs-root (iyes? "Are you using a shared dataset for your central repo, such as via `bcachefs' or `btrfs'? ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
