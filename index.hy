@@ -145,5 +145,4 @@
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
 
-(if (= __name__ "__main__")
-    (main :obj (Dict (dict))))
+(if (= __name__ "__main__") (main))

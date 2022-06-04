@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-04 Sat 06:10 -->
+<!-- 2022-06-04 Sat 06:22 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -60,7 +60,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org454ae60">makefile</a></li>
+<li><a href="#org4231bed">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -241,8 +241,7 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
 
-(if (= __name__ "__main__")
-    (main :obj (Dict (dict))))
+(if (= __name__ "__main__") (main))
 </code></pre>
 </div>
 </div>
@@ -256,12 +255,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="orgacc92bb">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org69ca15a">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org25462cd">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orgfec907e">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -369,9 +368,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org454ae60" class="outline-2">
-<h2 id="org454ae60">makefile</h2>
-<div class="outline-text-2" id="text-org454ae60">
+<div id="outline-container-org4231bed" class="outline-2">
+<h2 id="org4231bed">makefile</h2>
+<div class="outline-text-2" id="text-org4231bed">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -401,7 +400,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-04 Sat 06:10</p>
+<p class="date">Created: 2022-06-04 Sat 06:22</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
