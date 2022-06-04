@@ -4,9 +4,6 @@
 #! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
-(import sys [argv])
-(del (get argv 0))
-
 (import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
 (import click)
@@ -147,3 +144,6 @@
               (if zfs-root
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
+
+(if (= __name__ "__main__")
+    (strapper :obj (Dict (dict))))

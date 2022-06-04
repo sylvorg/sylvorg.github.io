@@ -30,9 +30,6 @@ syvl.org
 #+end_src
 
 #+begin_src hy
-(import sys [argv])
-(del (get argv 0))
-
 (import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
 (import click)
@@ -181,6 +178,9 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
               (if zfs-root
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
+
+(if (= __name__ "__main__")
+    (strapper :obj (Dict (dict))))
 #+end_src
 
 * index.html

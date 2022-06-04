@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-04 Sat 05:38 -->
+<!-- 2022-06-04 Sat 06:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -61,7 +61,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org6511a46">makefile</a></li>
+<li><a href="#org0007e51">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -89,10 +89,7 @@
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">(import sys [argv])
-(del (get argv 0))
-
-(import bakery)
+<pre><code class="language-hy match-braces rainbow-braces">(import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
 (import click)
 (import os [path listdir chmod getlogin symlink])
@@ -244,6 +241,9 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
               (if zfs-root
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
+
+(if (= __name__ "__main__")
+    (strapper :obj (Dict (dict))))
 </code></pre>
 </div>
 </div>
@@ -257,12 +257,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org1ba4f06">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org033e222">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org05ad2f0">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org23b2cc6">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -370,9 +370,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org6511a46" class="outline-2">
-<h2 id="org6511a46">makefile</h2>
-<div class="outline-text-2" id="text-org6511a46">
+<div id="outline-container-org0007e51" class="outline-2">
+<h2 id="org0007e51">makefile</h2>
+<div class="outline-text-2" id="text-org0007e51">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -402,7 +402,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-04 Sat 05:38</p>
+<p class="date">Created: 2022-06-04 Sat 06:10</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
