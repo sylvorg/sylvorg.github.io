@@ -83,7 +83,7 @@
                   (do (gpg :fetch True)
                       (gpg :card-status True))
                   (if (setx gpg-key (ino? "Path to gpg private key?"))
-                      (gpg :import True gpg-key)
+                      (gpg :m/subcommand "import" True gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
               (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
