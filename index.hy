@@ -146,4 +146,4 @@
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
 
 (if (= __name__ "__main__")
-    (strapper :obj (Dict (dict))))
+    (main :obj (Dict (dict))))

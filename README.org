@@ -180,7 +180,7 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
 
 (if (= __name__ "__main__")
-    (strapper :obj (Dict (dict))))
+    (main :obj (Dict (dict))))
 #+end_src
 
 * index.html

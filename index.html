@@ -61,7 +61,7 @@
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org0007e51">makefile</a></li>
+<li><a href="#org454ae60">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -243,7 +243,7 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
 
 (if (= __name__ "__main__")
-    (strapper :obj (Dict (dict))))
+    (main :obj (Dict (dict))))
 </code></pre>
 </div>
 </div>
@@ -257,12 +257,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org033e222">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="orgacc92bb">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org23b2cc6">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org25462cd">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -370,9 +370,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org0007e51" class="outline-2">
-<h2 id="org0007e51">makefile</h2>
-<div class="outline-text-2" id="text-org0007e51">
+<div id="outline-container-org454ae60" class="outline-2">
+<h2 id="org454ae60">makefile</h2>
+<div class="outline-text-2" id="text-org454ae60">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
