@@ -267,6 +267,9 @@ else
     set +eo pipefail
     if ! $bootstrap $@; then
         set -eo pipefail
+        if [ "$(uname -o)" == "Android" ]; then
+            termux-setup-storage
+        fi
         read -p $'Nix-shell bootstrap failed; try again after installing dependencies?\n' installDeps < /dev/tty
         if [ "$installDeps" == "y" ] || [ "$installDeps" == "yes" ]; then
             pacapt="$HOME/.local/share/syvl/pacapt"
@@ -289,7 +292,12 @@ else
                 tailapiGit="$HOME/.local/share/tailapi.git"
                 git clone https://github.com/syvlorg/tailapi.git $tailapiGit || git -C $tailapiGit pull origin main
                 chmod +x $tailapiGit/tailapi.py
-                ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
+                if [ "$(uname -o)" == "Android" ]; then
+                    ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
+                else
+                    $pacapt -Syyu tailscale
+                    ln -sf $tailapiGit/tailapi.py /usr/local/bin/tailapi
+                fi
             fi
             hy $bootstrap $@
         fi
