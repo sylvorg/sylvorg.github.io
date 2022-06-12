@@ -13,7 +13,7 @@ syvl.org
 * index.nix
 
 #+begin_src nix :tangle (meq/tangle-path)
-with (import "${(builtins.fetchGit { url = "https://github.com/<<username>>/<<username>>"; ref = "main"; })}/etc/nixos").pkgs; mkShell {
+with (import "${(builtins.fetchGit { url = "https://github.com/<<username>>/<<username>>"; ref = "main"; })}/etc/nixos").legacyPackages; mkShell {
     buildInputs = [ pythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
 }
 #+end_src
