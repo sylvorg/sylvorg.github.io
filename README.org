@@ -10,6 +10,14 @@
 syvl.org
 #+end_src
 
+* index.nix
+
+#+begin_src nix :tangle (meq/tangle-path)
+with (import "${(builtins.fetchGit { url = "https://github.com/<<username>>/<<username>>"; ref = "main"; })}/etc/nixos").pkgs; mkShell {
+    buildInputs = [ pythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
+}
+#+end_src
+
 * index.hy
 :PROPERTIES:
 :header-args:hy+: :noweb-ref 0d6044e9-0d98-4d89-adcc-955ad42f0fee
@@ -23,8 +31,7 @@ syvl.org
 
 #+begin_src hy
 #[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass
-#! nix-shell -I nixpkgs=https://github.com/<<username>>/nixpkgs/archive/j.tar.gz
+#! nix-shell ~/.local/share/syvl/shell
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 #+end_src
@@ -234,6 +241,7 @@ and [[https://stackoverflow.com/users/2092245/ferhtgoldaraz][ferhtgoldaraz's]] a
 set -eo pipefail
 mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
+shell="$HOME/.local/share/syvl/shell"
 #+end_src
 
 Adapted from [[https://unix.stackexchange.com/users/48083/graeme][Graeme's]] answer [[https://unix.stackexchange.com/a/121255/270053][here]],
@@ -248,6 +256,14 @@ fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
+if [ -f "$shell" ]; then
+    read -p $'Curl nix shell file: ' curlShellFile < /dev/tty
+else
+    curlShellFile="yes"
+fi
+if [ "$curlShellFile" == "y" ] || [ "$curlShellFile" == "yes" ]; then
+    curl -fsSLo $shell https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.nix
+fi
 #+end_src
 
 #+begin_src shell
@@ -255,9 +271,9 @@ chmod +x $bootstrap
 if hash nix 2> /dev/null; then
     $bootstrap $@
 else
-    read -p $'Install nix?\n' installNix < /dev/tty
+    read -p $'Install nix: ' installNix < /dev/tty
     if [ "$installNix" == "y" ] || [ "$installNix" == "yes" ]; then
-        read -p $'Install nix as multi-user?\n' installMulti < /dev/tty
+        read -p $'Install nix as multi-user: ' installMulti < /dev/tty
         if [ "$installMulti" == "y" ] || [ "$installMulti" == "yes" ]; then
             sh <(curl -fsSL https://nixos.org/nix/install) --daemon
         else
@@ -270,10 +286,14 @@ else
         if [ "$(uname -o)" == "Android" ]; then
             termux-setup-storage
         fi
-        read -p $'Nix-shell bootstrap failed; try again after installing dependencies?\n' installDeps < /dev/tty
+        read -p $'Nix-shell bootstrap failed; try again after installing dependencies: ' installDeps < /dev/tty
         if [ "$installDeps" == "y" ] || [ "$installDeps" == "yes" ]; then
             pacapt="$HOME/.local/share/syvl/pacapt"
-            read -p $'Curl pacapt?\n' curlPacapt < /dev/tty
+            if [ -f "$pacapt" ]; then
+                read -p $'Curl pacapt: ' curlPacapt < /dev/tty
+            else
+                curlPacapt="yes"
+            fi
             if [ "$curlPacapt" == "y" ] || [ "$curlPacapt" == "yes" ]; then
                 if [ "$(uname -o)" == "Android" ]; then
                     pkg install curl
@@ -284,7 +304,7 @@ else
                 fi
                 curl -fsSLo $pacapt https://raw.githubusercontent.com/icy/pacapt/ng/pacapt
             fi
-            read -p $'Install dependencies?\n' setupDependencies < /dev/tty
+            read -p $'Install dependencies: ' setupDependencies < /dev/tty
             if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
                 chmod +x $pacapt
                 $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python

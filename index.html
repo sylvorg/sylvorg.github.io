@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-06 Mon 02:03 -->
+<!-- 2022-06-12 Sun 18:19 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -55,13 +55,14 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
+<li><a href="#orgd2cbd26">index.nix</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#orgf7972d3">makefile</a></li>
+<li><a href="#orga121609">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -76,13 +77,24 @@
 </div>
 </div>
 
+<div id="outline-container-orgd2cbd26" class="outline-2">
+<h2 id="orgd2cbd26">index.nix</h2>
+<div class="outline-text-2" id="text-orgd2cbd26">
+<div class="org-src-container">
+<pre><code class="language-nix match-braces rainbow-braces">with (import "${(builtins.fetchGit { url = "https://github.com/shadowrylander/shadowrylander"; ref = "main"; })}/etc/nixos").pkgs; mkShell {
+    buildInputs = [ pythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
+}
+</code></pre>
+</div>
+</div>
+</div>
+
 <div id="outline-container-697a3a77-89eb-4408-8cac-a5001e05daa2" class="outline-2">
 <h2 id="697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</h2>
 <div class="outline-text-2" id="text-697a3a77-89eb-4408-8cac-a5001e05daa2">
 <div class="org-src-container">
 <pre><code class="language-hy match-braces rainbow-braces">#[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell -p python310Packages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass
-#! nix-shell -I nixpkgs=https://github.com/shadowrylander/nixpkgs/archive/j.tar.gz
+#! nix-shell ~/.local/share/syvl/shell
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 </code></pre>
@@ -256,12 +268,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org4a3b192">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="orgb0c4ce2">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org4fd5b60">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org6be3e0d">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -298,6 +310,7 @@ and <a href="https://stackoverflow.com/users/2092245/ferhtgoldaraz">ferhtgoldara
 <pre><code class="language-sh match-braces rainbow-braces">set -eo pipefail
 mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
+shell="$HOME/.local/share/syvl/shell"
 </code></pre>
 </div>
 
@@ -315,6 +328,14 @@ fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
+if [ -f "$shell" ]; then
+    read -p $'Curl nix shell file: ' curlShellFile &lt; /dev/tty
+else
+    curlShellFile="yes"
+fi
+if [ "$curlShellFile" == "y" ] || [ "$curlShellFile" == "yes" ]; then
+    curl -fsSLo $shell https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.nix
+fi
 </code></pre>
 </div>
 
@@ -323,9 +344,9 @@ fi
 if hash nix 2&gt; /dev/null; then
     $bootstrap $@
 else
-    read -p $'Install nix?\n' installNix &lt; /dev/tty
+    read -p $'Install nix: ' installNix &lt; /dev/tty
     if [ "$installNix" == "y" ] || [ "$installNix" == "yes" ]; then
-        read -p $'Install nix as multi-user?\n' installMulti &lt; /dev/tty
+        read -p $'Install nix as multi-user: ' installMulti &lt; /dev/tty
         if [ "$installMulti" == "y" ] || [ "$installMulti" == "yes" ]; then
             sh &lt;(curl -fsSL https://nixos.org/nix/install) --daemon
         else
@@ -338,10 +359,14 @@ else
         if [ "$(uname -o)" == "Android" ]; then
             termux-setup-storage
         fi
-        read -p $'Nix-shell bootstrap failed; try again after installing dependencies?\n' installDeps &lt; /dev/tty
+        read -p $'Nix-shell bootstrap failed; try again after installing dependencies: ' installDeps &lt; /dev/tty
         if [ "$installDeps" == "y" ] || [ "$installDeps" == "yes" ]; then
             pacapt="$HOME/.local/share/syvl/pacapt"
-            read -p $'Curl pacapt?\n' curlPacapt &lt; /dev/tty
+            if [ -f "$pacapt" ]; then
+                read -p $'Curl pacapt: ' curlPacapt &lt; /dev/tty
+            else
+                curlPacapt="yes"
+            fi
             if [ "$curlPacapt" == "y" ] || [ "$curlPacapt" == "yes" ]; then
                 if [ "$(uname -o)" == "Android" ]; then
                     pkg install curl
@@ -352,7 +377,7 @@ else
                 fi
                 curl -fsSLo $pacapt https://raw.githubusercontent.com/icy/pacapt/ng/pacapt
             fi
-            read -p $'Install dependencies?\n' setupDependencies &lt; /dev/tty
+            read -p $'Install dependencies: ' setupDependencies &lt; /dev/tty
             if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
                 chmod +x $pacapt
                 $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
@@ -377,9 +402,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-orgf7972d3" class="outline-2">
-<h2 id="orgf7972d3">makefile</h2>
-<div class="outline-text-2" id="text-orgf7972d3">
+<div id="outline-container-orga121609" class="outline-2">
+<h2 id="orga121609">makefile</h2>
+<div class="outline-text-2" id="text-orga121609">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -409,7 +434,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-06 Mon 02:03</p>
+<p class="date">Created: 2022-06-12 Sun 18:19</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
@@ -420,6 +445,7 @@ EOF
 set -eo pipefail
 mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
+shell="$HOME/.local/share/syvl/shell"
 if [ -f "$bootstrap" ]; then
     read -p $'Curl hylang index script: ' curlIndexScript < /dev/tty
 else
@@ -428,13 +454,21 @@ fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
+if [ -f "$shell" ]; then
+    read -p $'Curl nix shell file: ' curlShellFile < /dev/tty
+else
+    curlShellFile="yes"
+fi
+if [ "$curlShellFile" == "y" ] || [ "$curlShellFile" == "yes" ]; then
+    curl -fsSLo $shell https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.nix
+fi
 chmod +x $bootstrap
 if hash nix 2> /dev/null; then
     $bootstrap $@
 else
-    read -p $'Install nix?\n' installNix < /dev/tty
+    read -p $'Install nix: ' installNix < /dev/tty
     if [ "$installNix" == "y" ] || [ "$installNix" == "yes" ]; then
-        read -p $'Install nix as multi-user?\n' installMulti < /dev/tty
+        read -p $'Install nix as multi-user: ' installMulti < /dev/tty
         if [ "$installMulti" == "y" ] || [ "$installMulti" == "yes" ]; then
             sh <(curl -fsSL https://nixos.org/nix/install) --daemon
         else
@@ -447,10 +481,14 @@ else
         if [ "$(uname -o)" == "Android" ]; then
             termux-setup-storage
         fi
-        read -p $'Nix-shell bootstrap failed; try again after installing dependencies?\n' installDeps < /dev/tty
+        read -p $'Nix-shell bootstrap failed; try again after installing dependencies: ' installDeps < /dev/tty
         if [ "$installDeps" == "y" ] || [ "$installDeps" == "yes" ]; then
             pacapt="$HOME/.local/share/syvl/pacapt"
-            read -p $'Curl pacapt?\n' curlPacapt < /dev/tty
+            if [ -f "$pacapt" ]; then
+                read -p $'Curl pacapt: ' curlPacapt < /dev/tty
+            else
+                curlPacapt="yes"
+            fi
             if [ "$curlPacapt" == "y" ] || [ "$curlPacapt" == "yes" ]; then
                 if [ "$(uname -o)" == "Android" ]; then
                     pkg install curl
@@ -461,7 +499,7 @@ else
                 fi
                 curl -fsSLo $pacapt https://raw.githubusercontent.com/icy/pacapt/ng/pacapt
             fi
-            read -p $'Install dependencies?\n' setupDependencies < /dev/tty
+            read -p $'Install dependencies: ' setupDependencies < /dev/tty
             if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
                 chmod +x $pacapt
                 $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
