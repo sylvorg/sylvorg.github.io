@@ -2,7 +2,7 @@
 #[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
 #! nix-shell shell
 #! nix-shell -i hy
-#! nix-shell --option tarbal-ttl 0
+#! nix-shell --option tarball-ttl 0
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 (import bakery)
 (import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
