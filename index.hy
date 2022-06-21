@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell ~/.local/share/syvl/shell
+#! nix-shell shell
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 (import bakery)

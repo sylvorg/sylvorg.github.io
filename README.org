@@ -13,11 +13,11 @@ syvl.org
 * index.nix
 
 #+begin_src nix :tangle (meq/tangle-path)
-with builtins; with (fetchGit {
+with builtins; with (import (fetchGit {
     url = "https://github.com/<<username>>/<<username>>";
-    ref = "<<channel>>";
-}).legacyPackages.${currentSystem}; mkShell {
-    buildInputs = [ pythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
+    ref = "main";
+})).legacyPackages.${currentSystem} mkShell {
+    buildInputs = [ PythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
 }
 #+end_src
 
@@ -34,7 +34,7 @@ with builtins; with (fetchGit {
 
 #+begin_src hy
 #[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell ~/.local/share/syvl/shell
+#! nix-shell shell
 #! nix-shell -i hy
 ]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
 #+end_src
