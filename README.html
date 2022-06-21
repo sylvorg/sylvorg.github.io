@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-21 Tue 23:21 -->
+<!-- 2022-06-21 Tue 23:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -54,14 +54,14 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
-<li><a href="#org5681ff5">index.nix</a></li>
+<li><a href="#org7d38a0e">index.nix</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org4caf4f3">makefile</a></li>
+<li><a href="#org0e2d3a7">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -76,9 +76,9 @@
 </div>
 </div>
 
-<div id="outline-container-org5681ff5" class="outline-2">
-<h2 id="org5681ff5">index.nix</h2>
-<div class="outline-text-2" id="text-org5681ff5">
+<div id="outline-container-org7d38a0e" class="outline-2">
+<h2 id="org7d38a0e">index.nix</h2>
+<div class="outline-text-2" id="text-org7d38a0e">
 <div class="org-src-container">
 <pre><code class="language-nix match-braces rainbow-braces">with builtins; with (import (fetchGit {
     url = "https://github.com/shadowrylander/shadowrylander";
@@ -196,8 +196,7 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                 tailscale-api-command (dyes? tailscale-api-command "pass show keys/api/tailscale/jeet.ray")
                 tailscale-api-command-split (.split tailscale-api-command)
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
-                tailscale-api-command-args (cut tailscale-api-command-split 1 None)
-                tailscaled-port (dyes? tailscaled-port 41641) ]
+                tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
               (if import-yubikey
                   (do (gpg :fetch True)
                       (gpg :card-status True))
@@ -281,12 +280,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="orgf15c6d6">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org04f748c">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orgada50e5">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="orge0f6864">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -415,9 +414,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org4caf4f3" class="outline-2">
-<h2 id="org4caf4f3">makefile</h2>
-<div class="outline-text-2" id="text-org4caf4f3">
+<div id="outline-container-org0e2d3a7" class="outline-2">
+<h2 id="org0e2d3a7">makefile</h2>
+<div class="outline-text-2" id="text-org0e2d3a7">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -447,7 +446,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-21 Tue 23:21</p>
+<p class="date">Created: 2022-06-21 Tue 23:29</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

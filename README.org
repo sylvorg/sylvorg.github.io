@@ -129,8 +129,7 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                 tailscale-api-command (dyes? tailscale-api-command "pass show keys/api/tailscale/jeet.ray")
                 tailscale-api-command-split (.split tailscale-api-command)
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
-                tailscale-api-command-args (cut tailscale-api-command-split 1 None)
-                tailscaled-port (dyes? tailscaled-port 41641) ]
+                tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
               (if import-yubikey
                   (do (gpg :fetch True)
                       (gpg :card-status True))
