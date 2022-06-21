@@ -72,8 +72,6 @@
                                  "remote" True
                                  "force" True }
                 bootstrap-path (Path f"{home}/.config/yadm/bootstrap")
-                bootstrap-bin (do (chmod-bootstrap bootstrap-path)
-                                  (bakery :program- bootstrap-path))
                 reponame "aiern"
                 user-repo (dyes? user-repo f"{home}/{reponame}")
                 primary-repo f"{primary-home}/{reponame}"
@@ -151,7 +149,8 @@
                               (make :f f"{worktree}/.emacs.d/makefile" "soft-init")))))
               (nixos-generate-config :run True)
               (if bootstrap
-                  (bootstrap-bin worktree))
+                  (do (chmod-bootstrap bootstrap-path)
+                      ((bakery :program- bootstrap-path) worktree)))
               (if zfs-root
                   (do (.set zfs :snapdir "visible" dataset :m/run True)
                       (.inherit zfs :r True "snapdir" dataset :m/run True))))))
