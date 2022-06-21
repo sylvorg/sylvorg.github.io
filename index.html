@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-21 Tue 21:59 -->
+<!-- 2022-06-21 Tue 22:04 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -55,14 +55,14 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
-<li><a href="#orgaaefed5">index.nix</a></li>
+<li><a href="#org11e5093">index.nix</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#orgb79df88">makefile</a></li>
+<li><a href="#orgcb987f8">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -77,14 +77,14 @@
 </div>
 </div>
 
-<div id="outline-container-orgaaefed5" class="outline-2">
-<h2 id="orgaaefed5">index.nix</h2>
-<div class="outline-text-2" id="text-orgaaefed5">
+<div id="outline-container-org11e5093" class="outline-2">
+<h2 id="org11e5093">index.nix</h2>
+<div class="outline-text-2" id="text-org11e5093">
 <div class="org-src-container">
 <pre><code class="language-nix match-braces rainbow-braces">with builtins; with (import (fetchGit {
     url = "https://github.com/shadowrylander/shadowrylander";
     ref = "main";
-})).legacyPackages.${currentSystem} mkShell {
+})).legacyPackages.${currentSystem}; mkShell {
     buildInputs = [ PythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
 }
 </code></pre>
@@ -271,12 +271,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org998f9c7">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org631e845">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orgd0dea7f">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org153a20d">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -405,9 +405,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-orgb79df88" class="outline-2">
-<h2 id="orgb79df88">makefile</h2>
-<div class="outline-text-2" id="text-orgb79df88">
+<div id="outline-container-orgcb987f8" class="outline-2">
+<h2 id="orgcb987f8">makefile</h2>
+<div class="outline-text-2" id="text-orgcb987f8">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -437,7 +437,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-21 Tue 21:59</p>
+<p class="date">Created: 2022-06-21 Tue 22:04</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
