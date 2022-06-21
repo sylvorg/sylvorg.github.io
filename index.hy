@@ -35,9 +35,20 @@
    (.option click "-u" "--user-repo" :prompt "Use the default user repo (or enter another repo path here)")
    (.option click "-g" "--gpg-key-id" :prompt "Use the default gpg key id (or enter another id, such as the name, email address, etc. here)")
    (.option click "-t" "--tailscale-domain" :prompt "Use the default Tailscale domain (or enter another one here)")
-   (.option click "-a" "--tailscale-api-key" :prompt "Use the default Tailscale api key (or enter another one here)")
+   (.option click "-a" "--tailscale-api-key" :prompt "Use the default Tailscale api key (or enter another one here)" :hide-input True :confirmation-prompt True)
    (.option click "-A" "--tailscale-api-command" :prompt "Use the default Tailscale api command (or enter another one here)")
-   (defn main [ impermanent import-yubikey git-clone yadm-clone secrets bootstrap zfs-root initialize-yadm-submodules initialize-primary-submodules primary-user user-repo gpg-key-id tailscale-domain tailscale-api-key tailscale-api-command ]
+   (defn main [ bootstrap
+                impermanent
+                import-yubikey
+                initialize-primary-submodules
+                initialize-yadm-submodules
+                primary-user
+                tailscale-api-command
+                tailscale-api-key
+                tailscale-domain
+                user-repo gpg-key-id
+                yadm-clone
+                zfs-root ]
          (let [ current-user (getlogin)
                 home (.home Path)
                 username "shadowrylander"

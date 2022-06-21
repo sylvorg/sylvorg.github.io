@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-21 Tue 22:44 -->
+<!-- 2022-06-21 Tue 22:56 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -55,14 +55,14 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
-<li><a href="#orgbe98f53">index.nix</a></li>
+<li><a href="#orga16ee70">index.nix</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org3da07c8">makefile</a></li>
+<li><a href="#org8301834">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -77,9 +77,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgbe98f53" class="outline-2">
-<h2 id="orgbe98f53">index.nix</h2>
-<div class="outline-text-2" id="text-orgbe98f53">
+<div id="outline-container-orga16ee70" class="outline-2">
+<h2 id="orga16ee70">index.nix</h2>
+<div class="outline-text-2" id="text-orga16ee70">
 <div class="org-src-container">
 <pre><code class="language-nix match-braces rainbow-braces">with builtins; with (import (fetchGit {
     url = "https://github.com/shadowrylander/shadowrylander";
@@ -148,9 +148,20 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
    (.option click "-u" "--user-repo" :prompt "Use the default user repo (or enter another repo path here)")
    (.option click "-g" "--gpg-key-id" :prompt "Use the default gpg key id (or enter another id, such as the name, email address, etc. here)")
    (.option click "-t" "--tailscale-domain" :prompt "Use the default Tailscale domain (or enter another one here)")
-   (.option click "-a" "--tailscale-api-key" :prompt "Use the default Tailscale api key (or enter another one here)")
+   (.option click "-a" "--tailscale-api-key" :prompt "Use the default Tailscale api key (or enter another one here)" :hide-input True :confirmation-prompt True)
    (.option click "-A" "--tailscale-api-command" :prompt "Use the default Tailscale api command (or enter another one here)")
-   (defn main [ impermanent import-yubikey git-clone yadm-clone secrets bootstrap zfs-root initialize-yadm-submodules initialize-primary-submodules primary-user user-repo gpg-key-id tailscale-domain tailscale-api-key tailscale-api-command ]
+   (defn main [ bootstrap
+                impermanent
+                import-yubikey
+                initialize-primary-submodules
+                initialize-yadm-submodules
+                primary-user
+                tailscale-api-command
+                tailscale-api-key
+                tailscale-domain
+                user-repo gpg-key-id
+                yadm-clone
+                zfs-root ]
          (let [ current-user (getlogin)
                 home (.home Path)
                 username "shadowrylander"
@@ -272,12 +283,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org93d3020">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="org6133c25">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org2b3a049">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org5ee97f7">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -325,7 +336,7 @@ and <a href="https://stackoverflow.com/users/2092245/ferhtgoldaraz">ferhtgoldara
 
 <div class="org-src-container">
 <pre><code class="language-sh match-braces rainbow-braces">if [ -f "$bootstrap" ]; then
-    read -p $'Curl hylang index script: ' curlIndexScript &lt; /dev/tty
+    read -p $'Curl hylang bootstrap script: ' curlIndexScript &lt; /dev/tty
 else
     curlIndexScript="yes"
 fi
@@ -406,9 +417,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org3da07c8" class="outline-2">
-<h2 id="org3da07c8">makefile</h2>
-<div class="outline-text-2" id="text-org3da07c8">
+<div id="outline-container-org8301834" class="outline-2">
+<h2 id="org8301834">makefile</h2>
+<div class="outline-text-2" id="text-org8301834">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -438,7 +449,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-21 Tue 22:44</p>
+<p class="date">Created: 2022-06-21 Tue 22:56</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
@@ -451,7 +462,7 @@ mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
 shell="$HOME/.local/share/syvl/shell"
 if [ -f "$bootstrap" ]; then
-    read -p $'Curl hylang index script: ' curlIndexScript < /dev/tty
+    read -p $'Curl hylang bootstrap script: ' curlIndexScript < /dev/tty
 else
     curlIndexScript="yes"
 fi
