@@ -136,7 +136,7 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                                   (gpg :card-status True :m/dazzle True)
                                   (print)
                                   (except [e SystemError]
-                                          (print f"Sorry; your yubikey either isn't inserted or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
+                                          (print f"Sorry; either your yubikey isn't inserted or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
                                           (input))
                                   (else (break))))
                       (for [line (gpg :card-status True :m/split "\n")]
@@ -144,9 +144,19 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                                (do (gpg :fetch (get (.split line ": ") 1))
                                    (break)))))
                   (if (setx gpg-key (ino? "Path to gpg private key: "))
-                      (gpg :m/subcommand "import" gpg-key)
+                      (while True
+                             (try (gpg :m/subcommand "import" gpg-key)
+                                  (except [e SystemError]
+                                          (print f"Sorry; either your key could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
+                                          (input))
+                                  (else (break))))
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
-              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
+              (while True
+                     (try (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
+                          (except [e SystemError]
+                                  (print f"Sorry; either your key trust could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
+                                  (input))
+                          (else (break))))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
                   (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
