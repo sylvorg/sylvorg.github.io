@@ -130,7 +130,7 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                 tailscale-api-command-split (.split tailscale-api-command)
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
                 tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
-              (.bake- gpg :m/stderr-stdout True)
+              (.bake- gpg :m/stdout-stderr True)
               (if import-yubikey
                   (for [line (gpg :card-status True :m/split "\n")]
                        (if (in "URL" line)
