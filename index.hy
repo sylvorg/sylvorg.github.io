@@ -94,7 +94,7 @@
                                           (print f"Sorry; your yubikey either isn't inserted or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
                                           (input))
                                   (else (break))))
-                      (for [line (gpg :card-status True :m/str True :m/split "\n")]
+                      (for [line (gpg :card-status True :m/split "\n")]
                            (if (in "URL" line)
                                (do (gpg :fetch (get (.split line ": ") 1))
                                    (break)))))
