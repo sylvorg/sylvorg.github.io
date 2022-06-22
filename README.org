@@ -130,33 +130,16 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                 tailscale-api-command-split (.split tailscale-api-command)
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
                 tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
+              (.bake- gpg :m/stderr-stdout True)
               (if import-yubikey
-                  (do (while True
-                             (try (print "The gnupg card status:\n")
-                                  (gpg :card-status True :m/dazzle True)
-                                  (print)
-                                  (except [e SystemError]
-                                          (print f"Sorry; either your yubikey isn't inserted or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                          (input))
-                                  (else (break))))
-                      (for [line (gpg :card-status True :m/split "\n")]
-                           (if (in "URL" line)
-                               (do (gpg :fetch (get (.split line ": ") 1))
-                                   (break)))))
+                  (for [line (gpg :card-status True :m/split "\n")]
+                       (if (in "URL" line)
+                           (do (gpg :fetch (get (.split line ": ") 1))
+                               (break))))
                   (if (setx gpg-key (ino? "Path to gpg private key: "))
-                      (while True
-                             (try (gpg :m/subcommand "import" gpg-key)
-                                  (except [e SystemError]
-                                          (print f"Sorry; either your key could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                          (input))
-                                  (else (break))))
+                      (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
-              (while True
-                     (try (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
-                          (except [e SystemError]
-                                  (print f"Sorry; either your key trust could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                  (input))
-                          (else (break))))
+              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
                   (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)

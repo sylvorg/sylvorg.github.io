@@ -4,7 +4,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-22 Wed 04:01 -->
+<!-- 2022-06-22 Wed 04:30 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -55,14 +55,14 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
-<li><a href="#org461c110">index.nix</a></li>
+<li><a href="#orgfae55ff">index.nix</a></li>
 <li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
 <li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org5e0245c">makefile</a></li>
+<li><a href="#orgca45b57">makefile</a></li>
 </ul>
 </div>
 </div>
@@ -77,9 +77,9 @@
 </div>
 </div>
 
-<div id="outline-container-org461c110" class="outline-2">
-<h2 id="org461c110">index.nix</h2>
-<div class="outline-text-2" id="text-org461c110">
+<div id="outline-container-orgfae55ff" class="outline-2">
+<h2 id="orgfae55ff">index.nix</h2>
+<div class="outline-text-2" id="text-orgfae55ff">
 <div class="org-src-container">
 <pre><code class="language-nix match-braces rainbow-braces">with builtins; with (import (fetchGit {
     url = "https://github.com/shadowrylander/shadowrylander";
@@ -198,33 +198,16 @@ Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eri
                 tailscale-api-command-split (.split tailscale-api-command)
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
                 tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
+              (.bake- gpg :m/stderr-stdout True)
               (if import-yubikey
-                  (do (while True
-                             (try (print "The gnupg card status:\n")
-                                  (gpg :card-status True :m/dazzle True)
-                                  (print)
-                                  (except [e SystemError]
-                                          (print f"Sorry; either your yubikey isn't inserted or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                          (input))
-                                  (else (break))))
-                      (for [line (gpg :card-status True :m/split "\n")]
-                           (if (in "URL" line)
-                               (do (gpg :fetch (get (.split line ": ") 1))
-                                   (break)))))
+                  (for [line (gpg :card-status True :m/split "\n")]
+                       (if (in "URL" line)
+                           (do (gpg :fetch (get (.split line ": ") 1))
+                               (break))))
                   (if (setx gpg-key (ino? "Path to gpg private key: "))
-                      (while True
-                             (try (gpg :m/subcommand "import" gpg-key)
-                                  (except [e SystemError]
-                                          (print f"Sorry; either your key could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                          (input))
-                                  (else (break))))
+                      (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
-              (while True
-                     (try (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
-                          (except [e SystemError]
-                                  (print f"Sorry; either your key trust could not be imported or something else happened! When all set up, please press enter; in the meantime, here is the error: {(repr e)}")
-                                  (input))
-                          (else (break))))
+              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
               (if (not (or (.exists path user-repo) (len (listdir user-repo))))
                   (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
                           (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
@@ -301,12 +284,12 @@ Programs necessary for the bootstrap:
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org21da1b0">yadm git "make gnumake" fd emacs
+<pre><code class="language-plaintext match-braces rainbow-braces" id="orgde95451">yadm git "make gnumake" fd emacs
 </code></pre>
 </div>
 
 <div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="orgbc00c0a">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org7d4f2ce">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
 </code></pre>
 </div>
 
@@ -435,9 +418,9 @@ fi
 </div>
 </div>
 
-<div id="outline-container-org5e0245c" class="outline-2">
-<h2 id="org5e0245c">makefile</h2>
-<div class="outline-text-2" id="text-org5e0245c">
+<div id="outline-container-orgca45b57" class="outline-2">
+<h2 id="orgca45b57">makefile</h2>
+<div class="outline-text-2" id="text-orgca45b57">
 <div class="org-src-container">
 <pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
 .DEFAULT_GOAL := super-push
@@ -467,7 +450,7 @@ super-push: et cpush
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-22 Wed 04:01</p>
+<p class="date">Created: 2022-06-22 Wed 04:30</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
