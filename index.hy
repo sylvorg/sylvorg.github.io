@@ -86,8 +86,10 @@
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
                 tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
               (if import-yubikey
-                  (do (gpg :fetch True)
-                      (gpg :card-status True))
+                  (for [line (gpg :card-status True :m/str True :m/split "\n")]
+                       (if (in "URL" line)
+                           (do (gpg :fetch (get (.split line ": ") 1))
+                               (break))))
                   (if (setx gpg-key (ino? "Path to gpg private key: "))
                       (gpg :m/subcommand "import" gpg-key)
                       (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
