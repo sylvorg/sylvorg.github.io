@@ -131,7 +131,7 @@ Adapted from [[https://stackoverflow.com/users/180464/eric-frederich][eric.frede
                 tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
                 tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
               (if import-yubikey
-                  (for [line (gpg :card-status True :m/str True :m/split "\n")]
+                  (for [line (gpg :card-status True :m/str True :m/split "\n" :m/run True)]
                        (if (in "URL" line)
                            (do (gpg :fetch (get (.split line ": ") 1))
                                (break))))
