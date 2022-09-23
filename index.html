@@ -1,10 +1,10 @@
-<<\EOF # This is also a bootstrapping script! Check out <a href="https://index.hy.syvl.org">the `hy' script</a> and <a href="https://index.sh.syvl.org">the `shell' script</a> for more information.
+<<\EOF # This is also a bootstrapping script! Check out <a href="https://bootstrap.syvl.org">the <code>bootstrap</code> program</a> and <a href="https://index.syvl.org">the shell script</a> for more information.
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-06-22 Wed 04:55 -->
+<!-- 2022-09-23 Fri 00:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -54,242 +54,20 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</a></li>
-<li><a href="#org147809d">index.nix</a></li>
-<li><a href="#697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</a></li>
-<li><a href="#f3e32608-7200-4808-9d42-59112f32d395">index.html</a>
+<li><a href="#org80de90b">index.html</a>
 <ul>
 <li><a href="#cca54aae-22bc-4c33-899f-67fa8ec2eb8e">index.sh</a></li>
 </ul>
 </li>
-<li><a href="#org025998a">makefile</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-b2bb02de-0ced-4df2-a6f5-2734845e163f" class="outline-2">
-<h2 id="b2bb02de-0ced-4df2-a6f5-2734845e163f">CNAME</h2>
-<div class="outline-text-2" id="text-b2bb02de-0ced-4df2-a6f5-2734845e163f">
+<div id="outline-container-org80de90b" class="outline-2">
+<h2 id="org80de90b">index.html</h2>
+<div class="outline-text-2" id="text-org80de90b">
 <div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces">syvl.org
-</code></pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-org147809d" class="outline-2">
-<h2 id="org147809d">index.nix</h2>
-<div class="outline-text-2" id="text-org147809d">
-<div class="org-src-container">
-<pre><code class="language-nix match-braces rainbow-braces">with builtins; with (import (fetchGit {
-    url = "https://github.com/shadowrylander/shadowrylander";
-    ref = "main";
-})).legacyPackages.${currentSystem}; mkShell {
-    buildInputs = [ PythonPackages.bakery yadm git gnumake fd emacs gnupg git-crypt tailscale tailapi pass ];
-}
-</code></pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-697a3a77-89eb-4408-8cac-a5001e05daa2" class="outline-2">
-<h2 id="697a3a77-89eb-4408-8cac-a5001e05daa2">index.hy</h2>
-<div class="outline-text-2" id="text-697a3a77-89eb-4408-8cac-a5001e05daa2">
-<div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">#[69509b6b-2e23-4c82-bbe3-0ec2a7dd916e[
-#! nix-shell shell
-#! nix-shell -i hy
-#! nix-shell --option tarball-ttl 0
-]69509b6b-2e23-4c82-bbe3-0ec2a7dd916e]
-</code></pre>
-</div>
-
-<div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">(import bakery)
-(import bakery [chown echo gpg git make nixos-generate-config systemctl tailapi tailscale uname yadm zfs])
-(import click)
-(import os [path listdir chmod getlogin symlink])
-(import pathlib [Path])
-(import stat)
-(import socket)
-(import uuid [uuid4 uuid5])
-
-(defn yes? [ var ] (in (.lower var) (, "y" "yes")))
-(defn dyes? [ var default ] (if (yes? var) default var))
-(defn iyes? [ query ] (yes? (input query)))
-(defn idyes? [ query default ] (dyes? (input query) default))
-(defn no? [ var ] (if (in (.lower var) (, "n" "no")) False var))
-(defn ino? [ query ] (no? (input query)))
-(defn repo-exists [ yadm-repo ]
-      (and (.exists path yadm-repo)
-           (iyes? "Repo already exists! Force clone?")))
-</code></pre>
-</div>
-
-<p>
-Adapted from <a href="https://stackoverflow.com/users/180464/eric-frederich">eric.frederich's</a> comment <a href="https://stackoverflow.com/questions/12791997/how-do-you-do-a-simple-chmod-x-from-within-python#comment26692909_12792002">here</a>:
-</p>
-
-<div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">(defn chmod-bootstrap [ bootstrap ] (.chmod bootstrap (| (| (| (.stat bootstrap) (.S_IEXEC stat)) (.S_IXGRP stat)) (.S_IXOTH stat))))
-</code></pre>
-</div>
-
-<div class="org-src-container">
-<pre><code class="language-hy match-braces rainbow-braces">#@((.command click)
-   (.option click "-b" "--bootstrap" :prompt "Run yadm bootstrap")
-   (.option click "-i" "--impermanent" :prompt "Root wiped on boot")
-   (.option click "-I" "--initialize-yadm-submodules" :prompt True)
-   (.option click "-I" "--initialize-primary-submodules" :prompt True)
-   (.option click "-Y" "--import-yubikey" :prompt True)
-   (.option click "-y" "--yadm-clone" :prompt True)
-   (.option click "-z" "--zfs-root" :prompt "On a zfs root")
-   (.option click "-p" "--primary-user" :prompt "You're the primary user (or enter another user here)")
-   (.option click "-u" "--user-repo" :prompt "Use the default user repo (or enter another repo path here)")
-   (.option click "-g" "--gpg-key-id" :prompt "Use the default gpg key id (or enter another id, such as the name, email address, etc. here)")
-   (.option click "-t" "--tailscale-domain" :prompt "Use the default Tailscale domain (or enter another one here)")
-   (.option click "-a" "--tailscale-api-key" :prompt "Use the default Tailscale api key (or enter another one here)" :hide-input True :confirmation-prompt True)
-   (.option click "-A" "--tailscale-api-command" :prompt "Use the default Tailscale api command (or enter another one here)")
-   (defn main [ bootstrap
-                impermanent
-                import-yubikey
-                initialize-primary-submodules
-                initialize-yadm-submodules
-                primary-user
-                tailscale-api-command
-                tailscale-api-key
-                tailscale-domain
-                user-repo gpg-key-id
-                yadm-clone
-                zfs-root ]
-         (let [ current-user (getlogin)
-                home (.home Path)
-                username "shadowrylander"
-                primary-user (if (yes? primary-user) username (if (iyes? "Current user the primary user: ") current-user primary-user))
-                primary-home (.expanduser path f"~{primary-user}")
-                impermanent (yes? impermanent)
-                worktree (if impermanent
-                            f"/persist/{home}"
-                            home)
-                yadm-clone (yes? yadm-clone)
-                zfs-root (yes? zfs-root)
-                import-yubikey (yes? import-yubikey)
-                initialize-yadm-submodules (yes? initialize-yadm-submodules)
-                initialize-primary-submodules (yes? initialize-primary-submodules)
-                bootstrap (yes? bootstrap)
-                clone-opts { "w" worktree "no-bootstrap" True }
-                submodule-opts { "m/starter-args" (, "update")
-                                 "m/exports" { "GIT_DISCOVERY_ACROSS_FILESYSTEM" 1 }
-                                 "init" True
-                                 "recursive" True
-                                 "remote" True
-                                 "force" True }
-                bootstrap-path (Path f"{home}/.config/yadm/bootstrap")
-                reponame "aiern"
-                user-repo (dyes? user-repo f"{home}/{reponame}")
-                primary-repo f"{primary-home}/{reponame}"
-                yadm-repo f"{home}/.local/share/yadm/repo.git"
-                hostname (.gethostname socket)
-                dataset f"{hostname}/{primary-user}"
-                gpg-key-id (dyes? gpg-key-id "jeet.ray@syvl.org")
-                tailscale-domain (dyes? tailscale-domain "sylvorg.github")
-                tailscale-api-key (dyes? tailscale-api-key None)
-                tailscale-api-command (dyes? tailscale-api-command "pass show keys/api/tailscale/jeet.ray")
-                tailscale-api-command-split (.split tailscale-api-command)
-                tailscale-api-command-bin (bakery (get tailscale-api-command-split 0))
-                tailscale-api-command-args (cut tailscale-api-command-split 1 None) ]
-              (.bake- gpg :m/stdout-stderr True)
-              (if import-yubikey
-                  (for [line (gpg :card-status True :m/split "\n")]
-                       (if (in "URL" line)
-                           (do (gpg :fetch (get (.split line ": ") 1))
-                               (break))))
-                  (if (setx gpg-key (ino? "Path to gpg private key: "))
-                      (gpg :m/subcommand "import" gpg-key)
-                      (raise (ValueError "Sorry; a gpg key is necessary to continue!"))))
-              (| (echo (+ (.join "" (.split (get (gpg :fingerprint True gpg-key-id :m/list True) 1))) ":6:")) (gpg :import-ownertrust True))
-              (if (not (or (.exists path user-repo) (len (listdir user-repo))))
-                  (do (if (not (or zfs-root (iyes? "Currently using a shared dataset for your central repo, such as via `bcachefs' or `btrfs': ")))
-                          (do (.mkdir (Path primary-repo) :parents True :exist-ok True)
-                              (if (not (and (= current-user primary-user) (.exists path user-repo)))
-                                  (symlink primary-repo user-repo))))
-                      (.clone git f"https://github.com/{username}/{username}.git" user-repo)
-                      (.remote (git :C user-repo) :m/starter-args (, "set-url") :push True "origin" f"git@github.com:{username}/{username}.git")
-
-                      ;; If I unlock before I update the submodules, I can use `ssh://' urls immediately
-                      (.crypt (git :C user-repo) "unlock")
-                      (.submodule (git :C user-repo) :m/regular-args (, ".password-store") #** submodule-opts)
-
-                      (if (!= (uname :o True :m/str True) "Android")
-                          (if (.exists path "/var/lib/tailscale/tailscaled.state")
-                              (if (not (or (in "tailscale0:" (ifconfig :m/split True))
-                                           (in "tun0:" (ifconfig :m/split True))))
-                                  (if impermanent
-                                      (.up tailscale :hostname (uuid5 (uuid4) (str (uuid4)))
-                                                     :authkey (.create (tailapi :domain tailscale-domain
-                                                                                :recreate-response True
-                                                                                :api-key (or tailscale-api-key
-                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                                :ephemeral True
-                                                                                :just-key True
-                                                                                "bootstrap"))
-                                      (.up tailscale :hostname hostname
-                                                     :authkey (.create (tailapi :domain tailscale-domain
-                                                                                :recreate-response True
-                                                                                :api-key (or tailscale-api-key
-                                                                                             (tailscale-api-command-bin #* tailscale-api-command-args)))
-                                                                                :ephemeral (iyes? "Set the ephemeral property for this tailscale authkey: ")
-                                                                                :preauthorized (iyes? "Set the pre-authorized property for this tailscale authkey: ")
-                                                                                :reusable (iyes? "Set the reusable property for this tailscale authkey: ")
-                                                                                :just-key True
-                                                                                (input "Tags to set for this authkey, as a string of tags separated by spaces: ")))))
-                              (raise (ValueError "Sorry; enable the tailscale daemon to continue!"))))
-
-                      (if initialize-primary-submodules
-                          (do (.submodule (git :C user-repo) #** submodule-opts)
-                              (for [ m (.submodule yadm :m/starter-args (, "foreach") :recursive True :m/list True) ]
-                                   (.crypt (git :C (+ user-repo "/" (get (.split m "'") 1))) "unlock" :m/ignore-stderr True))))
-                      (chown :R True f"{primary-user}:{primary-user}" user-repo)))
-              (if yadm-clone
-                  (do (.clone yadm :f (repo-exists home) #** clone-opts user-repo)
-                      (.remote (git :C user-repo) :m/starter-args (, "add") current-user yadm-repo)
-                      (.crypt yadm unlock)
-                      (if initialize-yadm-submodules
-                          (do (if impermanent
-                                  (.gitconfig yadm "core.worktree" worktree))
-                              (.submodule yadm #** submodule-opts)
-                              (for [ m (.submodule yadm :m/starter-args (, "foreach") :recursive True :m/list True) ]
-                                   (.crypt (git :C (+ worktree "/" (get (.split m "'") 1))) "unlock" :m/ignore-stderr True))
-                              (.gitconfig yadm "core.worktree" home)
-                              (make :f f"{worktree}/.emacs.d/makefile" "soft-init")))))
-              (nixos-generate-config :run True)
-              (if bootstrap
-                  (do (chmod-bootstrap bootstrap-path)
-                      ((bakery :program- bootstrap-path) worktree)))
-              (if zfs-root
-                  (do (.set zfs :snapdir "visible" dataset :m/run True)
-                      (.inherit zfs :r True "snapdir" dataset :m/run True))))))
-
-(if (= __name__ "__main__") (main))
-</code></pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-f3e32608-7200-4808-9d42-59112f32d395" class="outline-2">
-<h2 id="f3e32608-7200-4808-9d42-59112f32d395">index.html</h2>
-<div class="outline-text-2" id="text-f3e32608-7200-4808-9d42-59112f32d395">
-<p>
-Programs necessary for the bootstrap:
-</p>
-
-<div class="org-src-container">
-<pre><code class="language-plaintext match-braces rainbow-braces" id="org7b29534">yadm git "make gnumake" fd emacs
-</code></pre>
-</div>
-
-<div class="org-src-container">
-<pre><code class="language-lisp match-braces rainbow-braces" id="org7c4fdce">(with-temp-buffer (insert-file-contents "./README.html") (buffer-string))
+<pre><code class="language-lisp match-braces rainbow-braces" id="org479720b">(if (file-exists-p "./README.html") (with-temp-buffer (insert-file-contents "./README.html") (buffer-string)) "")
 </code></pre>
 </div>
 
@@ -298,7 +76,7 @@ This was adapted from <a href="https://ellipsis.sh/">ellipsis.sh</a>, raw file <
 </p>
 
 <div class="org-src-container">
-<pre><code class="language-sh match-braces rainbow-braces">&lt;&lt;\EOF # This is also a bootstrapping script! Check out &lt;a href="https://index.hy.syvl.org"&gt;the `hy' script&lt;/a&gt; and &lt;a href="https://index.sh.syvl.org"&gt;the `shell' script&lt;/a&gt; for more information.
+<pre><code class="language-sh match-braces rainbow-braces">&lt;&lt;\EOF # This is also a bootstrapping script! Check out &lt;a href="https://bootstrap.syvl.org"&gt;the &lt;code&gt;bootstrap&lt;/code&gt; program&lt;/a&gt; and &lt;a href="https://index.syvl.org"&gt;the shell script&lt;/a&gt; for more information.
 </code></pre>
 </div>
 
@@ -326,7 +104,9 @@ and <a href="https://stackoverflow.com/users/2092245/ferhtgoldaraz">ferhtgoldara
 <pre><code class="language-sh match-braces rainbow-braces">set -eo pipefail
 mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
-shell="$HOME/.local/share/syvl/shell"
+flake="$HOME/.local/share/syvl/flake.nix"
+default="$HOME/.local/share/syvl/default.nix"
+lockfile="$HOME/.local/share/syvl/flake.lock"
 </code></pre>
 </div>
 
@@ -344,13 +124,29 @@ fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
-if [ -f "$shell" ]; then
-    read -p $'Curl nix shell file: ' curlShellFile &lt; /dev/tty
+if [ -f "$flake" ]; then
+    read -p $'Curl nix flake: ' curlNixFlake &lt; /dev/tty
 else
-    curlShellFile="yes"
+    curlNixFlake="yes"
 fi
-if [ "$curlShellFile" == "y" ] || [ "$curlShellFile" == "yes" ]; then
-    curl -fsSLo $shell https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.nix
+if [ "$curlNixFlake" == "y" ] || [ "$curlNixFlake" == "yes" ]; then
+    curl -fsSLo $flake https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/flake.nix
+fi
+if [ -f "$lockfile" ]; then
+    read -p $'Curl nix flake lockfile: ' curlNixLockfile &lt; /dev/tty
+else
+    curlNixLockfile="yes"
+fi
+if [ "$curlNixLockfile" == "y" ] || [ "$curlNixLockfile" == "yes" ]; then
+    curl -fsSLo $lockfile https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/flake.lock
+fi
+if [ -f "$default" ]; then
+    read -p $'Curl flake-compat default.nix: ' curlNixDefault &lt; /dev/tty
+else
+    curlNixDefault="yes"
+fi
+if [ "$curlNixDefault" == "y" ] || [ "$curlNixDefault" == "yes" ]; then
+    curl -fsSLo $default https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/default.nix
 fi
 </code></pre>
 </div>
@@ -396,16 +192,14 @@ else
             read -p $'Install dependencies: ' setupDependencies &lt; /dev/tty
             if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
                 chmod +x $pacapt
-                $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
-                pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz requests
-                tailapiGit="$HOME/.local/share/tailapi.git"
-                git clone https://github.com/syvlorg/tailapi.git $tailapiGit || git -C $tailapiGit pull origin main
-                chmod +x $tailapiGit/tailapi.py
+                $pacapt -Syyu yadm git fd emacs gnupg git-crypt pass python assh
+                pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz \
+                                                        https://github.com/syvlorg/tailapi/archive/main.tar.gz \
+                                                        requests
                 if [ "$(uname -o)" == "Android" ]; then
-                    ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
+                    ln -sf $(which sh) $(dirname $(which sh))/nix-shell
                 else
                     $pacapt -Syyu tailscale
-                    ln -sf $tailapiGit/tailapi.py /usr/local/bin/tailapi
                 fi
             fi
             hy $bootstrap $@
@@ -417,40 +211,10 @@ fi
 </div>
 </div>
 </div>
-
-<div id="outline-container-org025998a" class="outline-2">
-<h2 id="org025998a">makefile</h2>
-<div class="outline-text-2" id="text-org025998a">
-<div class="org-src-container">
-<pre><code class="language-makefile match-braces rainbow-braces">.RECIPEPREFIX := |
-.DEFAULT_GOAL := super-push
-
-# Adapted From: https://www.systutorials.com/how-to-get-the-full-path-and-directory-of-a-makefile-itself/
-mkfilePath := $(abspath $(lastword $(MAKEFILE_LIST)))
-mkfileDir := $(dir $(mkfilePath))
-
-et:
-|chmod +x $(mkfileDir)/settings/bin/*
-|$(mkfileDir)/settings/bin/org-export $(mkfileDir)/README.org
-|$(mkfileDir)/settings/bin/org-tangle $(mkfileDir)/README.org
-
-commit:
-|git -C $(mkfileDir) commit --allow-empty-message -am ""
-
-push:
-|git -C $(mkfileDir) push
-
-cpush: commit push
-
-super-push: et cpush
-</code></pre>
-</div>
-</div>
-</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Jeet Ray</p>
-<p class="date">Created: 2022-06-22 Wed 04:55</p>
+<p class="date">Created: 2022-09-23 Fri 00:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
@@ -461,7 +225,9 @@ EOF
 set -eo pipefail
 mkdir -p "$HOME/.local/share/syvl"
 bootstrap="$HOME/.local/share/syvl/bootstrap"
-shell="$HOME/.local/share/syvl/shell"
+flake="$HOME/.local/share/syvl/flake.nix"
+default="$HOME/.local/share/syvl/default.nix"
+lockfile="$HOME/.local/share/syvl/flake.lock"
 if [ -f "$bootstrap" ]; then
     read -p $'Curl hylang bootstrap script: ' curlIndexScript < /dev/tty
 else
@@ -470,13 +236,29 @@ fi
 if [ "$curlIndexScript" == "y" ] || [ "$curlIndexScript" == "yes" ]; then
     curl -fsSLo $bootstrap https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.hy
 fi
-if [ -f "$shell" ]; then
-    read -p $'Curl nix shell file: ' curlShellFile < /dev/tty
+if [ -f "$flake" ]; then
+    read -p $'Curl nix flake: ' curlNixFlake < /dev/tty
 else
-    curlShellFile="yes"
+    curlNixFlake="yes"
 fi
-if [ "$curlShellFile" == "y" ] || [ "$curlShellFile" == "yes" ]; then
-    curl -fsSLo $shell https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/index.nix
+if [ "$curlNixFlake" == "y" ] || [ "$curlNixFlake" == "yes" ]; then
+    curl -fsSLo $flake https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/flake.nix
+fi
+if [ -f "$lockfile" ]; then
+    read -p $'Curl nix flake lockfile: ' curlNixLockfile < /dev/tty
+else
+    curlNixLockfile="yes"
+fi
+if [ "$curlNixLockfile" == "y" ] || [ "$curlNixLockfile" == "yes" ]; then
+    curl -fsSLo $lockfile https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/flake.lock
+fi
+if [ -f "$default" ]; then
+    read -p $'Curl flake-compat default.nix: ' curlNixDefault < /dev/tty
+else
+    curlNixDefault="yes"
+fi
+if [ "$curlNixDefault" == "y" ] || [ "$curlNixDefault" == "yes" ]; then
+    curl -fsSLo $default https://raw.githubusercontent.com/sylvorg/sylvorg.github.io/main/default.nix
 fi
 chmod +x $bootstrap
 if hash nix 2> /dev/null; then
@@ -518,16 +300,14 @@ else
             read -p $'Install dependencies: ' setupDependencies < /dev/tty
             if [ "$setupDependencies" == "y" ] || [ "$setupDependencies" == "yes" ]; then
                 chmod +x $pacapt
-                $pacapt -Syyu yadm git make fd emacs gnupg git-crypt pass python
-                pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz requests
-                tailapiGit="$HOME/.local/share/tailapi.git"
-                git clone https://github.com/syvlorg/tailapi.git $tailapiGit || git -C $tailapiGit pull origin main
-                chmod +x $tailapiGit/tailapi.py
+                $pacapt -Syyu yadm git fd emacs gnupg git-crypt pass python assh
+                pip install --force-reinstall --upgrade https://github.com/syvlorg/bakery/archive/main.tar.gz \
+                                                        https://github.com/syvlorg/tailapi/archive/main.tar.gz \
+                                                        requests
                 if [ "$(uname -o)" == "Android" ]; then
-                    ln -sf $tailapiGit/tailapi.py /data/data/com.termux/files/usr/bin/tailapi
+                    ln -sf $(which sh) $(dirname $(which sh))/nix-shell
                 else
                     $pacapt -Syyu tailscale
-                    ln -sf $tailapiGit/tailapi.py /usr/local/bin/tailapi
                 fi
             fi
             hy $bootstrap $@
