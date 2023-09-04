@@ -1,0 +1,43 @@
+[tool.poetry]
+
+# Change this!
+name = ""
+
+version = "1.0.0.0"
+
+# Change this!
+description = ""
+
+authors = ["sylvorg <jeet.ray@syvl.org>"]
+license = "OREO"
+
+# Change this!
+include = [
+	"[...]/**/*.py",
+	"[...]/**/*.hy",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+oreo = { git = "https://github.com/syvlorg/oreo.git", branch = "main" }
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+poetry = "*"
+poetry2setup = "*"
+pytest-hy = { git = "https://github.com/syvlorg/pytest-hy.git", branch = "master" }
+pytest-randomly = "*"
+pytest-parametrized = "*"
+pytest-sugar = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = [
+	"--strict-markers",
+]
+markers = [
+
+]
