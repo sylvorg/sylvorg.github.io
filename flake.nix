@@ -32,7 +32,7 @@
   description = "The flake for sylvorg.github.io!";
   inputs = {
     bundle = {
-      url = "git+https://github.com/sylvorg/bundle.git";
+      url = "https://github.com/sylvorg/bundle.git";
       type = "git";
       submodules = true;
     };
